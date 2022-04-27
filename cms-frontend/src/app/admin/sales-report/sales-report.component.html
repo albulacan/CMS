@@ -1,0 +1,46 @@
+<div class="container pt-2">
+    <h3>Sales Report</h3>
+    <br />
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Year:</label>
+                <div class="col-sm-9">
+                    <select class="form-control" name="year" [(ngModel)]="year" (change)="onYearChange()">
+                        <option value="">Select Year</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+    <br />
+    <div class="row">
+        <table class="table table striped" [appBlockUi]="isProcessing">
+            <thead>
+                <th>Date</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Total Sales</th>
+            </thead>
+            <tbody>
+                <tr *ngIf="!sales?.length">
+                    <td colspan="4" class="text-center">No records found</td>
+                </tr>
+                <tr *ngFor="let item of sales">
+                    <td>{{item.createdOn | date: 'mediumDate'}}</td>
+                    <td>{{item.createdOn | date: 'MMMM'}}</td>
+                    <td>{{item.createdOn | date: 'yyyy'}}</td>
+                    <td>P {{item.amountDue | number: '1.2-2'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><strong>Grand Total:</strong></td>
+                    <td><strong>P {{totalSales | number: '1.2-2'}}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

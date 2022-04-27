@@ -1,0 +1,277 @@
+<div class="container pt-2">
+    <h3>Reservations</h3>
+    <br />
+    <form (submit)="grid.load()">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="form-group row">
+                    <label for="clientName" class="col-sm-4 col-form-label">Client Name:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="clientName" name="clientName"
+                            placeholder="Client Name" [(ngModel)]="filter.clientName">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1"></div>
+            <div class="col-lg-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Status:</label>
+                    <div class="col-sm-9">
+                        <select name="status" class="form-control" [(ngModel)]="filter.status">
+                            <option value="">Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Reserved">Reserved</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <button type="submit" class="btn btn-info w-100"><i class="fa fa-search"></i> Search</button>
+            </div>
+        </div>
+    </form>
+    <table class="table" [appBlockUi]="grid?.isProcessing">
+        <thead>
+            <tr>
+                <th scope="col">Reference No</th>
+                <th scope="col">Client Name</th>
+                <th scope="col">Date of Event</th>
+                <th scope="col">Time</th>
+                <th scope="col">Occasion</th>
+                <th scope="col">No of Pax</th>
+                <th scope="col">Created On</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="!grid?.itemsOnCurrentPage?.length">
+                <td class="text-center" colspan="8">No records found.</td>
+            </tr>
+            <tr *ngFor="let item of grid.itemsOnCurrentPage">
+                <td>
+                    <button class="btn btn-link" (click)="view(item)">{{item.referenceNo}}</button>
+                </td>
+                <td>{{item.clientName}}</td>
+                <td>{{item.date | date: 'mediumDate'}}</td>
+                <td>{{item.time}}</td>
+                <td>{{item.occasion}}</td>
+                <td>{{item.pax}}</td>
+                <td>{{item.createdOn | date: 'medium'}}</td>
+                <td>{{item.status}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col">
+            <span class="caption">{{grid.info}}</span>
+        </div>
+        <div class="col">
+            <app-pagination [maxPageIndex]="grid.maxPageIndex" (pageNumberChanged)="grid.currentPageIndex = $event;">
+            </app-pagination>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" (appBsModal)="detailModal = $event" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" [appBlockUi]="isProcessing">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><i
+                        class="fa fa-info-circle"></i>&nbsp;&nbsp;<strong>Reservation Detail</strong></h4>
+                <button type="button" class="close" (click)="detailModal.close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <fieldset disabled>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Client Name</label>
+                                    <input type="text" class="form-control" name="cname" [value]="model.clientName">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="text" class="form-control" name="eadress" [value]="model.user.emailAddress">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Mobile Number</label>
+                                    <input type="text" class="form-control" name="mnumber" [value]="model.user.mobileNo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Venue</label>
+                                    <input type="text" class="form-control" name="venue" placeholder="Venue"
+                                        [(ngModel)]="model.venue">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Occasion</label>
+                                    <select class="form-control" name="ocassion" [(ngModel)]="model.occasion">
+                                        <option value="">Select Occasion</option>
+                                        <option value="Birthday Event">Birthday Event</option>
+                                        <option value="Anniversary Event">Anniversary Event</option>
+                                        <option value="Debut Event">Debut Event</option>
+                                        <option value="Corporate Meeting">Corporate Meeting</option>
+                                        <option value="Wedding Event">Wedding Event</option>
+                                        <option value="Baptism Evem">Baptism Evem</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>No of Pax</label>
+                                    <input type="number" class="form-control" name="pax" placeholder="No of Pax"
+                                        [(ngModel)]="model.pax">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Date of Event</label>
+                                    <input type="text" class="form-control" name="date" placeholder="Date of Event"
+                                        [ngModel]="model.date" [appBsDatepicker]="{ disablePastAndPresentDate: true }">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Time of Event</label>
+                                    <select class="form-control" name="time" [(ngModel)]="model.time">
+                                        <option value="">Select Time</option>
+                                        <option value="11:00am - 3:00pm">11:00am - 03:00pm</option>
+                                        <option value="05:00pm - 09:00pm">05:00pm - 09:00pm</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Table Service</label>
+                                    <select class="form-control" name="tableservice" [(ngModel)]="model.tableService">
+                                        <option value="">Select Table Service</option>
+                                        <option value="Buffet">Buffet</option>
+                                        <option value="Plated">Plated</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Event Motif</label>
+                                    <input type="text" class="form-control" name="motif" placeholder="Motif"
+                                        [(ngModel)]="model.motif">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Theme</label>
+                                    <input type="text" class="form-control" name="theme" placeholder="Theme"
+                                        [(ngModel)]="model.theme">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Payment Option</label>
+                                    <select class="form-control" name="paymentoption" [(ngModel)]="model.paymentOption">
+                                        <option value="">Select Payment Option</option>
+                                        <option value="Down Payment">Down Payment</option>
+                                        <option value="Full Payment">Full Payment</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <br />
+                <h4 class="text-info">Packages</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <th>Package Name</th>
+                        <th class="package-description">Package Description</th>
+                        <th>Price</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="!model?.packages?.length">
+                            <td colspan="4" class="text-center font-italic">No packages added</td>
+                        </tr>
+                        <tr *ngFor="let item of model.packages; let i = index">
+                            <td>{{item.name}}</td>
+                            <td class="package-description" [innerText]="item.description"></td>
+                            <td><strong>P {{item.price | number: '1.2-2'}}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <h4 class="text-info">Menus</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <th>Name</th>
+                        <th class="package-description">Menu Description</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="!model?.menus?.length">
+                            <td colspan="5" class="text-center font-italic">No menus added</td>
+                        </tr>
+                        <tr *ngFor="let item of model.menus; let i = index">
+                            <td>{{item.name}}</td>
+                            <td class="package-description" [innerText]="item.description"></td>
+                            <td>{{item.quantity}}</td>
+                            <td><strong>P {{item.price | number: '1.2-2'}}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <p><strong>Total Items: {{totalItem}}</strong></p>
+                <p><strong>Total Amount Due: P {{model.amountDue | number: '1.2-2'}}</strong></p>
+                <p><strong>Total Amount Paid: P {{model.amountPaid | number: '1.2-2'}}</strong></p>
+                <br />
+                <form>
+                    <fieldset [disabled]="origStatus=== 'Cancelled' || origStatus === 'Completed'">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Amount Paid</label>
+                                    <input type="number" class="form-control" name="amp" placeholder="Amount Paid"
+                                        [(ngModel)]="amountPaid" (change)="calculateAmountPaid()">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select name="status" class="form-control" [(ngModel)]="model.status">
+                                        <option value="">Select Status</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Reserved">Reserved</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="generateInvoice()">Generate Invoice</button>
+                <button type="button" class="btn btn-info" [disabled]="origStatus === 'Cancelled' || origStatus === 'Completed'" (click)="update()">Save</button>
+                <button type="button" class="btn btn-secondary" (click)="detailModal.close()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="container pt-2">
+    <h3>Packages</h3>
+    <button class="btn btn-success float-right" (click)="add()"><i class="fa fa-plus"></i> Add Package</button>
+    <br />
+    <br />
+    <div class="col-12 data-grid-container">
+        <table class="table" [appBlockUi]="grid?.isProcessing || isProcessing">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">No. of Pax</th>
+                    <th scope="col">Menu Choices</th>
+                    <th scope="col">Adds On</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="!grid?.itemsOnCurrentPage?.length">
+                    <td class="text-center" colspan="7">No records found.</td>
+                </tr>
+                <tr *ngFor="let item of grid.itemsOnCurrentPage">
+                    <td>
+                        <button class="btn btn-link" (click)="view(item)">{{item.name}}</button>
+                    </td>
+                    <td>{{item.pax}}</td>
+                    <td>{{item.menu}}</td>
+                    <td>{{item.addsOn}}</td>
+                    <td>{{item.price | number:'1.2-2'}}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" (click)="delete(item)"><i
+                                class="fa fa-times"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col">
+            <span class="caption">{{grid.info}}</span>
+        </div>
+        <div class="col">
+            <app-pagination [maxPageIndex]="grid.maxPageIndex" (pageNumberChanged)="grid.currentPageIndex = $event;">
+            </app-pagination>
+        </div>
+    </div>
+
+    <div class="modal fade" (appBsModal)="modal = $event" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" [appBlockUi]="isProcessing">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">{{+model.packageId ? 'Edit' : 'Add'}} Package</h2>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="name" [(ngModel)]="model.name">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea rows="5" class="form-control" name="descrption"
+                                [(ngModel)]="model.description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>No. Of Pax</label>
+                            <input type="number" class="form-control" name="pax" [(ngModel)]="model.pax">
+                        </div>
+                        <div class="form-group">
+                            <label>Additional</label>
+                            <textarea rows="5" type="text" class="form-control" name="addsOn"
+                                [(ngModel)]="model.addsOn"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" class="form-control" name="price" [(ngModel)]="model.price">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="save()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

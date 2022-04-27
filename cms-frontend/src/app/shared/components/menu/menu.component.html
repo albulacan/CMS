@@ -1,0 +1,25 @@
+<div class="row">
+    <div *ngIf="!menus?.length" class="alert alert-dark w-100" role="alert">
+        No available menu for this category.
+    </div>
+    <div class="col-lg-4 col-xs-1 text-left" *ngFor="let item of menus" style="margin-bottom: 25px;">
+        <div class="card">
+            <img [src]="item.imagePath" class="card-img-top" alt="menu1">
+            <div class="card-body">
+                <h5 class="card-title text-info">{{item.name}}</h5>
+                <p class="card-text p-0 m-0"><strong>P {{item.price | number: '1.2-2'}}</strong></p>
+                <p class="card-text p-0 m-0">{{item.description}}</p>
+            </div>
+        </div>
+        <div *ngIf="showAddToCart" class="mt-2 pl-3 pr-3">
+            <div class="row">
+                <div class="col-6">
+                    <input type="number" class="form-control" name="quantity" placeholder="Quantity" [(ngModel)]="item.quantity">
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-success w-100" (click)="addToCart(item)"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

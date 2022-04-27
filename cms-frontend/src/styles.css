@@ -1,0 +1,44 @@
+.data-grid-container {
+    border: 1px solid #cfc9c933 !important;
+    border-radius: 10px !important;
+}
+
+.w-40 {
+    width: 40% !important;
+}
+
+.w-45 {
+    width: 45% !important;
+}
+
+.w-50 {
+    width: 50% !important;
+}
+
+.w-55 {
+    width: 55% !important;
+}
+
+.w-60 {
+    width: 60% !important;
+}
+
+.w-65 {
+    width: 65% !important;
+}
+
+.w-70 {
+    width: 70% !important;
+}
+
+.bg-main {
+    background-color: #6ca6e1;
+}
+
+.bg-primary {
+    background-color: #f6f6f6 !important;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}

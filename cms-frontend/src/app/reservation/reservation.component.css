@@ -1,0 +1,33 @@
+.reservation-details {
+    /* background-color: #f6f6f6; */
+    padding: 20px;
+}
+
+.btn-link {
+    font-size: 40px !important;
+}
+
+svg {
+    position: relative;
+    background: #ffffff;
+    text-align: center;
+    overflow: hidden;
+}
+
+.badge {
+    display: inline !important;
+    margin-left: -10px;
+    font-size: 10px !important;
+}
+
+.badge-warning {
+    color: #ffffff;
+    background-color: #e8a51c !important;
+    border: 1px solid #d89405;
+}
+
+@media only screen and (max-width: 900px) {
+    .package-description {
+        display: none;
+    }
+}

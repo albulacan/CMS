@@ -1,0 +1,187 @@
+<div class="modal fade" (appBsModal)="modal = $event" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document" [appBlockUi]="isProcessing">
+        <div class="modal-content">
+            <button type="button" class="close text-right pr-2" (click)="close()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="login-header">
+                <button class="btn btn-link" (click)="login()">LOGIN</button> | <button class="btn btn-link"
+                    (click)="signup()">SIGN UP</button>
+                <small class="form-text text-muted"><em>You must login first for reservation.</em></small>
+            </div>
+            <div class="login-form">
+                <div *ngIf="isLogin">
+                    <form (submit)="submit()">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="text" class="form-control" name="email" placeholder="Email Address" [(ngModel)]="model.emailAddress">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Password</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-link float-left" style="font-size: 14px !important;" (click)="resetPassword()">Forgot password?</button>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                </div>
+                <div *ngIf="isSignUp">
+                    <form (submit)="submit()">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Frst Name</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="text" class="form-control" name="fname" placeholder="First Name" [(ngModel)]="model.firstName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Middle Name</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="text" class="form-control" name="mname" placeholder="Middle Name" [(ngModel)]="model.middleName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Last Name</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="text" class="form-control" name="lname" placeholder="Last Name" [(ngModel)]="model.lastName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Address</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-home" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="text" class="form-control" name="address" placeholder="Address" [(ngModel)]="model.address">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Mobile No</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-phone" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="text" class="form-control" name="mobile" placeholder="Mobile Number" [(ngModel)]="model.mobileNo">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="text" class="form-control" name="email" placeholder="Email Address" [(ngModel)]="model.emailAddress">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Password</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Confirm Password</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
+                                </div>
+                                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" [(ngModel)]="model.confirmPassword">
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" (appBsModal)="passwordResetModal = $event" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document" [appBlockUi]="isProcessing">
+        <div class="modal-content">
+            <button type="button" class="close text-right pr-2" (click)="closeRP()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="login-header">
+                <h4>RESET PASSWORD</h4>
+                <small class="form-text text-muted"><em>{{resetPwMessage}}</em></small>
+            </div>
+            <div class="login-form">
+                <form *ngIf="+stage === 1">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></div>
+                            </div>
+                            <input type="text" class="form-control" name="emailA" placeholder="Email Address" [(ngModel)]="otpModel.emailAddress">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">OTP</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
+                            </div>
+                            <input type="text" class="form-control" name="otp" placeholder="OTP" [(ngModel)]="otpModel.otp">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-link float-left" style="font-size: 14px !important;" (click)="requestOTP()" [disabled]="+otpTimer > 0">{{otpTitle}} <span *ngIf="+otpTimer > 0">({{otpTimer}})</span></button>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary" (click)="validateOTP()">Validate OTP</button>
+                    </div>
+                </form>
+                <form *ngIf="+stage === 2" (submit)="confirmReset()">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Password</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
+                            </div>
+                            <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Confirm Password</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
+                            </div>
+                            <input type="password" class="form-control" name="password2" placeholder="Confirm Password" [(ngModel)]="model.confirmPassword">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Reset Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

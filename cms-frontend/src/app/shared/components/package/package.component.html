@@ -1,0 +1,13 @@
+<div class="card">
+    <div class="card-body text-dark text-left">
+        <h3 class="title text-info">{{item.name}}</h3>
+        <p class="font-italic m-0 p-0"><strong>Description/Inclusions:</strong></p>
+        <div class="pl-3 mb-" [innerText]="item.description">
+        </div>
+        <p class="m-0 p-0"><strong>Good for {{item.pax}} pax</strong></p>
+        <p class="font-italic m-0 p-0"><strong>Additional:</strong></p>
+        <div class="pl-3 mb-" [innerText]="item.addsOn">
+        </div>
+        <p class="m-0 p-0"><strong>P {{item.price | number: '1.2-2'}}</strong></p>
+    </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="container pt-2">
+    <h3>Menus</h3>
+    <button class="btn btn-success float-right" (click)="add()"><i class="fa fa-plus"></i> Add Menu</button>
+    <br />
+    <br />
+    <div class="col-12 data-grid-container">
+        <table class="table" [appBlockUi]="grid?.isProcessing || isProcessing">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="!grid?.itemsOnCurrentPage?.length">
+                    <td class="text-center" colspan="6">No records found.</td>
+                </tr>
+                <tr *ngFor="let item of grid.itemsOnCurrentPage">
+                    <td>
+                        <button class="btn btn-link" (click)="view(item)">{{item.name}}</button>
+                    </td>
+                    <td>{{item.description}}</td>
+                    <td>{{item.category}}</td>
+                    <td><img style="width: 100px;" [src]="getImage(item)"></td>
+                    <td>{{item.price | number:'1.2-2'}}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" (click)="delete(item)"><i
+                                class="fa fa-times"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col">
+            <span class="caption">{{grid.info}}</span>
+        </div>
+        <div class="col">
+            <app-pagination [maxPageIndex]="grid.maxPageIndex" (pageNumberChanged)="grid.currentPageIndex = $event;">
+            </app-pagination>
+        </div>
+    </div>
+
+    <div class="modal fade" (appBsModal)="modal = $event" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" [appBlockUi]="isProcessing">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">{{+model.menuId ? 'Edit' : 'Add'}} Menu</h2>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="name" [(ngModel)]="model.name">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="form-control" name="descrption" [(ngModel)]="model.description">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="form-control" name="category" [(ngModel)]="model.category">
+                                <option value="" disabled>Select Category</option>
+                                <option value="Pork">Pork</option>
+                                <option value="Beef">Beef</option>
+                                <option value="Chicken">Chicken</option>
+                                <option value="Fish">Fish</option>
+                                <option value="Vegetable">Vegetable</option>
+                                <option value="Pasta">Pasta</option>
+                                <option value="Drinks">Drinks</option>
+                                <option value="Dessert">Dessert</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" class="form-control" name="img" (change)="onImageChange($event)">
+                        </div>
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" class="form-control" name="price" [(ngModel)]="model.price">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="save()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

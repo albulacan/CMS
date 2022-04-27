@@ -1,0 +1,149 @@
+<div class="text-center pt-5 bg-main">
+    <img src="./assets/images/logo.png" class="navbar-brand-img" alt="..." style="width: 100px">
+    <h1 class="display-5 text-white">
+        Eric Eugenio's Catering Services
+    </h1>
+    <p class="text-white">
+        Best Caterer in Town. Located in Malolos, Bulacan.
+    </p>
+    <div>
+        <button type="button" class="btn btn-info" (click)="reserveNow()"><i class="fa fa-calendar"></i> Reserve
+            Now</button>
+    </div>
+</div>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path fill="#6ca6e1" fill-opacity="1"
+        d="M0,96L24,117.3C48,139,96,181,144,192C192,203,240,181,288,176C336,171,384,181,432,170.7C480,160,528,128,576,112C624,96,672,96,720,106.7C768,117,816,139,864,138.7C912,139,960,117,1008,117.3C1056,117,1104,139,1152,165.3C1200,192,1248,224,1296,250.7C1344,277,1392,299,1416,309.3L1440,320L1440,0L1416,0C1392,0,1344,0,1296,0C1248,0,1200,0,1152,0C1104,0,1056,0,1008,0C960,0,912,0,864,0C816,0,768,0,720,0C672,0,624,0,576,0C528,0,480,0,432,0C384,0,336,0,288,0C240,0,192,0,144,0C96,0,48,0,24,0L0,0Z">
+    </path>
+</svg>
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <ngb-carousel>
+                    <ng-template ngbSlide>
+                        <img src="assets/images/carousel/image1.jpg" class="d-block w-100" alt="1st">
+                        <div class="carousel-caption">
+                            <h3>Events</h3>
+                            <p>We can decorate for your event.</p>
+                        </div>
+                    </ng-template>
+                    <ng-template ngbSlide>
+                        <img src="assets/images/carousel/image2.jpg" class="d-block w-100" alt="2nd">
+                        <div class="carousel-caption">
+                            <h3>Events</h3>
+                            <p>We can decorate for your event.</p>
+                        </div>
+                    </ng-template>
+                    <ng-template ngbSlide>
+                        <img src="assets/images/carousel/image3.jpg" class="d-block w-100" alt="3rd">
+                        <div class="carousel-caption">
+                            <h3>Events</h3>
+                            <p>We can decorate for your event.</p>
+                        </div>
+                    </ng-template>
+                    <ng-template ngbSlide>
+                        <img src="assets/images/carousel/image4.jpg" class="d-block w-100" alt="4th">
+                        <div class="carousel-caption">
+                            <h3>Events</h3>
+                            <p>We can decorate for your event.</p>
+                        </div>
+                    </ng-template>
+                    <ng-template ngbSlide>
+                        <img src="assets/images/carousel/image5.jpg" class="d-block w-100" alt="5th">
+                        <div class="carousel-caption">
+                            <h3>Events</h3>
+                            <p>We can decorate for your event.</p>
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
+            </div>
+            <div class="col-lg-6">
+                <h1 class="text-dark display-5">Best Caterer at your Service!</h1>
+                <p class="text-dark mt-3">
+                    <i class="fa fa-check-circle text-info" aria-hidden="true"></i>
+                    Createive and elegant design.
+                </p>
+                <p class="text-dark mt-3">
+                    <i class="fa fa-check-circle text-info" aria-hidden="true"></i>
+                    Delightful food in an affordable price.
+                </p>
+                <p class="text-dark mt-3">
+                    <i class="fa fa-check-circle text-info" aria-hidden="true"></i>
+                    We will make your celebration of food with your family and friends lovely.
+                </p>
+                <p class="text-dark mt-3">
+                    <i class="fa fa-check-circle text-info" aria-hidden="true"></i>
+                    Service and food at its best.
+                </p>
+                <p class="text-dark mt-3">
+                    <i class="fa fa-check-circle text-info" aria-hidden="true"></i>
+                    Your imagination, our catering.
+                </p>
+                <p class="text-dark mt-3">
+                    <i class="fa fa-check-circle text-info" aria-hidden="true"></i>
+                    Perfect for any kind of occasion.
+                </p>
+                <p class="text-dark mt-3">
+                    <i class="fa fa-check-circle text-info" aria-hidden="true"></i>
+                    Make your events memmorable with your family and love ones.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section style="background-color: #5e72e4;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path fill="#5e72e4 " fill-opacity="1"
+            d="M0,256L60,245.3C120,235,240,213,360,192C480,171,600,149,720,165.3C840,181,960,235,1080,245.3C1200,256,1320,224,1380,208L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
+        </path>
+    </svg>
+    <div class="container text-center text-white">
+        <h1 class="display-5">Packages</h1>
+        <br />
+        <div class="row">
+            <div class="col-lg-4 col-xs-1" style="margin-bottom: 25px;" *ngFor="let item of packages">
+                <app-package [item]="item"></app-package>
+            </div>
+        </div>
+    </div>
+</section>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path fill="#5e72e4 " fill-opacity="1"
+        d="M0,224L60,218.7C120,213,240,203,360,192C480,181,600,171,720,181.3C840,192,960,224,1080,224C1200,224,1320,192,1380,176L1440,160L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z">
+    </path>
+</svg>
+<section>
+    <div class="container text-center text-dark">
+        <h1 class="display-5 text-info">Menus</h1>
+        <div class="row mb-2">
+            <div class="col-lg-3">
+                <select class="form-control" name="category" [(ngModel)]="selectedCategory">
+                    <option value="">Select Category</option>
+                    <option value="Pork">Pork</option>
+                    <option value="Beef">Beef</option>
+                    <option value="Chicken">Chicken</option>
+                    <option value="Fish">Fish</option>
+                    <option value="Vegetable">Vegetable</option>
+                    <option value="Pasta">Pasta</option>
+                    <option value="Drinks">Drinks</option>
+                    <option value="Dessert">Dessert</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+        </div>
+        <app-menu [menus]="getMenu()"></app-menu>
+    </div>
+</section>
+<br />
+<br />
+<br />
+<br />
+<app-footer></app-footer>
+
+
+<app-login *ngIf="showLogin" (ngModalClose)="showLogin = false"></app-login>

@@ -1,0 +1,32 @@
+<br /><br />
+<div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4 frm-login">
+        <h5>Eugenio's Catering Services Administrator Login</h5>
+        <br />
+        <form [appBlockUi]="isProcessing" (submit)="login()">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></div>
+                    </div>
+                    <input type="text" class="form-control" name="username" placeholder="Username" [(ngModel)]="model.username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Password</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
+                    </div>
+                    <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password">
+                </div>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-4"></div>
+</div>

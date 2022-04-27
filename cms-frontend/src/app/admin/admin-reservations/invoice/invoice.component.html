@@ -1,0 +1,78 @@
+<div class="container" [appBlockUi]="isProcessing">
+    <div class="row mb-3 pt-3">
+        <div class="col-lg-6">
+            <img src="./assets/images/logo.png" width="100">
+        </div>
+        <div class="col-lg-6 text-right pt-2">
+            <h2>Sales Invoice</h2>
+            <p>{{currentDate | date: 'mediumDate'}}</p>
+            <p><strong>{{model.referenceNo}}</strong></p>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-lg-12">
+            <strong>Eric Eugenio's Catering Services</strong>
+            <p>#33 Earth St. San Felipe Subdivision, Mojon 3000 Malolos, Philippines</p>
+            <p>0916 436 4009</p>
+            <p>enriquitoeugenio25@gmail.com</p>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-lg-12">
+            <strong>Bill To:</strong>
+            <p>{{model.user.lastName}}, {{model.user.firstName}} {{model.user.middleName}}</p>
+            <p>{{model.user.address}}</p>
+            <p>{{model.user.mobileNo}}</p>
+            <p>{{model.user.emailAddress}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="w-100">
+                <thead>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of model.packages">
+                        <td>Package</td>
+                        <td>{{item.name}}</td>
+                        <td>1</td>
+                        <td>{{item.price | number: '1.2-2'}}</td>
+                        <td>{{item.price | number: '1.2-2'}}</td>
+                    </tr>
+                    <tr *ngFor="let item of model.menus">
+                        <td>Menu</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.price | number: '1.2-2'}}</td>
+                        <td>{{(+item.price * +item.quantity) | number: '1.2-2'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><strong>Amount Due</strong></td>
+                        <td><strong>P {{model.amountDue | number: '1.2-2'}}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-6">
+            Prepared by: <strong>Eric Eugenio's Catering Services</strong>
+            <br />
+            {{currentDate | date: 'mediumDate'}}
+        </div>
+        <div class="col-6">
+            Received by: <strong>{{model.user.lastName}}, {{model.user.firstName}} {{model.user.middleName}}</strong>
+            <br />
+            Client
+        </div>
+    </div>
+    <button type="button" id="btn-print" class="btn btn-info mt-5" (click)="print()"><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+</div>

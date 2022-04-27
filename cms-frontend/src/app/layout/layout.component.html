@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light"
+    *ngIf="userService.userDetails.admin && userService.userDetails.isAuthenticated && isAdminPage && !isInvoicePage">
+    <img src="./assets/images/logo.png" class="navbar-brand-img" alt="..." width="50">
+    <a class="navbar-brand ml-2">Administrator</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" [routerLink]="['/admin-reservation']"><i class="fa fa-calendar"></i>
+                    Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin-package-management']"><i class="fa fa-archive"></i> Packages
+                    Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin-menu-management']"><i class="fa fa-bars"></i> Menus
+                    Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/admin-sales-report']"><i class="fa fa-list-alt"></i> Sales Report</a>
+            </li>
+        </ul>
+
+        <div class="nav-item dropdown">
+            <button class="btn btn-link" (click)="logout()"><i class="fa fa-sign-out"></i> Logout</button>
+        </div>
+    </div>
+</nav>
+
+<app-login *ngIf="showLogin" (ngModalClose)="showLogin = false"></app-login>
