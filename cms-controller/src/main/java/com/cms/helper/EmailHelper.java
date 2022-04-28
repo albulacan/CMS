@@ -25,12 +25,11 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import org.apache.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 
 import com.cms.model.EmailRequest;
 import com.cms.model.EmailSettings;
-import com.db.lib.utils.CryptoUtil;
 import com.db.lib.utils.PropertiesReader;
-import com.microsoft.sqlserver.jdbc.StringUtils;
 
 public class EmailHelper {
 	private static Logger LOGGER = Logger.getLogger(EmailHelper.class);
@@ -50,7 +49,7 @@ public class EmailHelper {
 			config.setSmtpServer(reader.getProperty("smtp.server"));
 			config.setSmtpPort(Integer.parseInt(reader.getProperty("smtp.port")));
 			config.setUsername(reader.getProperty("smtp.user"));
-			config.setPassword(CryptoUtil.decrypt(reader.getProperty("smtp.password")));
+			config.setPassword(reader.getProperty("smtp.password"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,22 +68,22 @@ public class EmailHelper {
 		try {
 			List<String> recipients = null;
 			List<String> cCopys = null;
-			if (!StringUtils.isEmpty(request.getRecipients())) {
+			if (!Strings.isEmpty(request.getRecipients())) {
 				recipients = Arrays.asList(request.getRecipients().split(","));
 			}
 			
-			if (!StringUtils.isEmpty(request.getcCopy())) {
+			if (!Strings.isEmpty(request.getcCopy())) {
 				cCopys = Arrays.asList(request.getcCopy().split(","));
 			}
 			
 			Session session = this.getSession(config);
 	
-			if (!StringUtils.isEmpty(config.getUsername()) && !StringUtils.isEmpty(config.getPassword())) {
+			if (!Strings.isEmpty(config.getUsername()) && !Strings.isEmpty(config.getPassword())) {
 				session = this.getSSLAuthentication(config, config.getUsername(), config.getPassword());
 			}
 			
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(String.format("Eric Eugenios Catering Services <%s>", config.getSmtpServer())));
+			message.setFrom(new InternetAddress(String.format("Eric Eugenios Catering Services <%s>", config.getUsername())));
 			message.setSubject(request.getSubject());
 			message.setSentDate(new Date());
 			

@@ -24,9 +24,9 @@ class CmsControllerApplicationTests {
 	
 //	@Test
 	void cypto() {
-		String text = "0qvGiQLVqi5/icSSTcZvZQ==";
+		String text = "System123";
 		try {
-			System.out.println(CryptoUtil.decrypt(text));
+			System.out.println(CryptoUtil.encrypt(text));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,6 +48,7 @@ class CmsControllerApplicationTests {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("test");
 	}
 
 }

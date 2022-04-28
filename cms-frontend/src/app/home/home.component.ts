@@ -106,6 +106,11 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  administrator() {
+    sessionStorage.clear();
+    this.router.navigate(['/admin-login']);
+  }
+
   
 
 }

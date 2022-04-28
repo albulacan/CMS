@@ -89,7 +89,7 @@ public class UserController {
 		            .toUriString();
 			EmailHelper emailHelper = new EmailHelper();
 			String body = emailHelper.getEmailTemplate("user-activation.html");
-			String activationLink = String.format("%s/cms-controller/api/user/activate-account/%d/%s", baseUrl, request.getUserId(), url);
+			String activationLink = String.format("https://cms-controller.herokuapp.com/api/user/activate-account/%d/%s", request.getUserId(), url);
 			body = body.replace("&lt;Link&gt;", activationLink);
 			EmailRequest emailRequest = new EmailRequest();
 			emailRequest.setBody(body);
@@ -125,7 +125,7 @@ public class UserController {
 			} else {
 				return new ResponseEntity<String>("Invalid activation link.", HttpStatus.OK);
 			}
-			return new ResponseEntity<String>("Account successfully acitvated. <a href='http://localhost:4200'>Click this link to login.</a>", HttpStatus.OK);
+			return new ResponseEntity<String>("Account successfully acitvated. <a href='https://ericeugenioscatering.000webhostapp.com'>Click this link to login.</a>", HttpStatus.OK);
 		} catch (Exception e) {
 			System.out.println(e);
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

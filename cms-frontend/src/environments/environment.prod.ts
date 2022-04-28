@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8080/cms-controller/api/'
+  apiUrl: 'https://cms-controller.herokuapp.com/api/'
 };
