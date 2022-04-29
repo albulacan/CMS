@@ -94,9 +94,7 @@ export class AdminReservationsComponent implements OnInit {
   }
 
   generateInvoice() {
-    let url = '';
-    url = `${this.location.prepareExternalUrl(this.location.path())}/invoice/${this.model.referenceNo}`;
-    window.open(url);
+    window.open(`${environment.webUrl}?invoice=${this.model.referenceNo}`);
   }
 
   get totalItem() {

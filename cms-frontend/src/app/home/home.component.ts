@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 import { IHttpResponse } from '../shared/models/http-response';
@@ -18,6 +18,7 @@ import { UserService } from '../shared/services/user.service';
 export class HomeComponent implements OnInit {
 
   isProcessing = false;
+  isMenuProcessing = false;
   menus = [] as Menu[];
   packages = [] as Package[];
   showLogin = false;
@@ -28,16 +29,26 @@ export class HomeComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private toastr: ToastrService,
     private router: Router,
-    public userService: UserService) { }
+    public userService: UserService,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.route.queryParams
+      .subscribe(params => {
+        if (params.invoice) {
+          this.router.navigate([`/admin-reservation/invoice/${params.invoice}`]);
+        } else if (params.admin === 'true') {
+          this.router.navigate(['/admin-login']);
+        }
+      }
+    );
     this.getMenus();
     this.getPackages();
   }
 
   getMenus() {
     this.menus = [];
-    this.isProcessing = true;
+    this.isMenuProcessing = true;
     let httpResponse: IHttpResponse;
     this.menuService.getAll()
       .pipe(finalize(() => {
@@ -53,12 +64,12 @@ export class HomeComponent implements OnInit {
         } else {
           this.toastr.error(`Unable to get menu. ${httpResponse.message}`);
         }
-        this.isProcessing = false;
+        this.isMenuProcessing = false;
       }))
       .subscribe((response: IHttpResponse) => httpResponse = response,
         error => {
           console.log(error);
-          this.isProcessing = false;
+          this.isMenuProcessing = false;
         });
   }
 

@@ -66,8 +66,7 @@ const routes: Routes = [
     component: InvoiceComponent,
     data: {
       isAdmin: true
-    },
-    canActivate: [AuthGuard]
+    }
   },
   {
       path: '**',

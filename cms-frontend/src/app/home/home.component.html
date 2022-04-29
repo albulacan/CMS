@@ -9,7 +9,6 @@
     <div>
         <button type="button" class="btn btn-info mr-2" (click)="reserveNow()"><i class="fa fa-calendar"></i> Reserve
             Now</button>
-        <button type="button" class="btn btn-light" (click)="administrator()"><i class="fa fa-lock"></i> Administrator</button>
     </div>
 </div>
 
@@ -119,7 +118,7 @@
     </path>
 </svg>
 <section>
-    <div class="container text-center text-dark" [appBlockUi]="isProcessing">
+    <div class="container text-center text-dark" [appBlockUi]="isMenuProcessing">
         <h1 class="display-5 text-info">Menus</h1>
         <div class="row mb-2">
             <div class="col-lg-3">
