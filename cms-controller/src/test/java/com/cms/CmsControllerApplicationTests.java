@@ -24,7 +24,7 @@ class CmsControllerApplicationTests {
 	
 //	@Test
 	void cypto() {
-		String text = "System123";
+		String text = "System{}123";
 		try {
 			System.out.println(CryptoUtil.encrypt(text));
 		} catch (Exception e) {

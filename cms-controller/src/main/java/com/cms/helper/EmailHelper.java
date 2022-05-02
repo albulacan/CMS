@@ -29,6 +29,7 @@ import org.apache.logging.log4j.util.Strings;
 
 import com.cms.model.EmailRequest;
 import com.cms.model.EmailSettings;
+import com.db.lib.utils.CryptoUtil;
 import com.db.lib.utils.PropertiesReader;
 
 public class EmailHelper {
@@ -49,7 +50,7 @@ public class EmailHelper {
 			config.setSmtpServer(reader.getProperty("smtp.server"));
 			config.setSmtpPort(Integer.parseInt(reader.getProperty("smtp.port")));
 			config.setUsername(reader.getProperty("smtp.user"));
-			config.setPassword(reader.getProperty("smtp.password"));
+			config.setPassword(CryptoUtil.decrypt(reader.getProperty("smtp.password")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
