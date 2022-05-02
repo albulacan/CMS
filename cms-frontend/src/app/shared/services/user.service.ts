@@ -23,6 +23,11 @@ export class UserService {
     return sessionStorage.getItem('user');
   }
 
+  public login(model: UserModel) {
+    const url = `${this.apiUrl}/login`;
+    return this.httpClient.post(url, model);
+  }
+
   public adminLogin(model: UserModel) {
     const url = `${this.apiUrl}/admin-login`;
     return this.httpClient.post(url, model);

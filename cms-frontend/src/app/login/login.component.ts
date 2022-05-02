@@ -132,7 +132,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   clientLogin() {
     this.isProcessing = true;
     let httpResponse: IHttpResponse;
-    this.userService.clientLogin(this.model)
+    this.userService.login(this.model)
       .pipe(finalize(() => {
         if (httpResponse?.success) {
           this.toastr.success(`Successfully signed in.`);
@@ -140,7 +140,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
           this.model = httpResponse.body;
           this.model.isAuthenticated = true;
           sessionStorage.setItem('user', JSON.stringify(this.model));
-          this.router.navigate(['/client-reservation']);
+          if (this.model.admin) {
+            this.router.navigate(['/admin-reservation']);
+          } else {
+            this.router.navigate(['/client-reservation']);
+          }
         } else {
           this.toastr.error(`${httpResponse.message}`);
         }

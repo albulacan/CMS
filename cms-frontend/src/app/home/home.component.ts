@@ -37,8 +37,6 @@ export class HomeComponent implements OnInit {
       .subscribe(params => {
         if (params.invoice) {
           this.router.navigate([`/admin-reservation/invoice/${params.invoice}`]);
-        } else if (params.admin === 'true') {
-          this.router.navigate(['/admin-login']);
         }
       }
     );

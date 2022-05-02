@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.cms.helper.EmailHelper;
 import com.cms.helper.UserHelper;
@@ -29,6 +28,27 @@ import com.cms.repository.UserRepository;
 @CrossOrigin
 @RequestMapping(value = "/api/user")
 public class UserController {
+	
+	@PostMapping("/login")
+	public HttpResponse<User> login(@RequestBody User request) {
+		UserRepository repo = null;
+		try {
+			repo = new UserRepository();
+			User user = repo.authenticateAdmin(request);
+			if (user == null || user.getUserId() <= 0) {
+				user = repo.authenticateClient(request);
+			}
+			if (user == null || user.getUserId() <= 0) {
+				return HttpResponse.failed("Invalid email address or password.");
+			}
+			return HttpResponse.success(user);
+		} catch (Exception e) {
+			System.out.println(e);
+			return HttpResponse.failed(e.getMessage());
+		} finally {
+			repo.dispose();
+		}
+	}
 	
 	@PostMapping("/admin-login")
 	public HttpResponse<User> adminLogin(@RequestBody User request) {
@@ -75,7 +95,7 @@ public class UserController {
 		try {
 			repo = new UserRepository();
 			User user = repo.getUserByEmail(request.getEmailAddress());
-			if (user != null && request.getUserId() > 0) {
+			if (user != null && user.getUserId() > 0) {
 				return HttpResponse.failed("Email address already exists.");
 			}
 			request.setUserId(repo.save(request));
@@ -83,10 +103,6 @@ public class UserController {
 			repo.setValidationUrl(request.getUserId(), url);
 			
 			//email sending
-			String baseUrl = ServletUriComponentsBuilder.fromRequestUri(servletRequest)
-		            .replacePath(null)
-		            .build()
-		            .toUriString();
 			EmailHelper emailHelper = new EmailHelper();
 			String body = emailHelper.getEmailTemplate("user-activation.html");
 			String activationLink = String.format("https://cms-controller.herokuapp.com/api/user/activate-account/%d/%s", request.getUserId(), url);

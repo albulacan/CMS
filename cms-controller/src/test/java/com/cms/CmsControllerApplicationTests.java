@@ -33,7 +33,7 @@ class CmsControllerApplicationTests {
 		}
 	}
 	
-//	@Test
+	@Test
 	void email() {
 		try {
 			EmailHelper emailHelper = new EmailHelper();
@@ -42,7 +42,7 @@ class CmsControllerApplicationTests {
 			body = body.replace("&lt;Link&gt;", activationLink);
 			EmailRequest emailRequest = new EmailRequest();
 			emailRequest.setBody(body);
-			emailRequest.setRecipients("albulacan@teligent.com.ph");
+			emailRequest.setRecipients("bulacanandrewlloyd@gmail.com");
 			emailRequest.setSubject("Eric Eugenio's Catering Services: Please validate your email address");
 			emailHelper.sendEmail(emailRequest);
 		} catch (Exception e) {

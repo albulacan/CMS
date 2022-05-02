@@ -17,7 +17,7 @@ public class UserRepository extends DbWorker {
 	}
 	
 	public User authenticateAdmin(User user) throws Exception {
-		SQLResult<User> sqlResult = SelectRecord(String.format("SELECT * FROM dbo.[User] WHERE Username = '%s' AND Password = '%s' AND IsAdmin = 1", user.getUsername(), user.getPassword()), SQLCommandType.Text, User.class);
+		SQLResult<User> sqlResult = SelectRecord(String.format("SELECT * FROM dbo.[User] WHERE Username = '%s' AND Password = '%s' AND IsAdmin = 1", user.getEmailAddress(), user.getPassword()), SQLCommandType.Text, User.class);
 		
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());

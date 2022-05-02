@@ -44,47 +44,49 @@
             </app-pagination>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" (appBsModal)="modal = $event" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document" [appBlockUi]="isProcessing">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="exampleModalLabel">{{+model.packageId ? 'Edit' : 'Add'}} Package</h2>
-                    <button type="button" class="close" (click)="close()" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" class="form-control" name="name" [(ngModel)]="model.name">
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea rows="5" class="form-control" name="descrption"
-                                [(ngModel)]="model.description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>No. Of Pax</label>
-                            <input type="number" class="form-control" name="pax" [(ngModel)]="model.pax">
-                        </div>
-                        <div class="form-group">
-                            <label>Additional</label>
-                            <textarea rows="5" type="text" class="form-control" name="addsOn"
-                                [(ngModel)]="model.addsOn"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Price</label>
-                            <input type="number" class="form-control" name="price" [(ngModel)]="model.price">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
-                    <button type="button" class="btn btn-primary" (click)="save()">Save changes</button>
-                </div>
+<br /><br />
+
+<div class="modal fade" (appBsModal)="modal = $event" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document" [appBlockUi]="isProcessing">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">{{+model.packageId ? 'Edit' : 'Add'}} Package</h2>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="name" [(ngModel)]="model.name">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea rows="5" class="form-control" name="descrption"
+                            [(ngModel)]="model.description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>No. Of Pax</label>
+                        <input type="number" class="form-control" name="pax" [(ngModel)]="model.pax">
+                    </div>
+                    <div class="form-group">
+                        <label>Additional</label>
+                        <textarea rows="5" type="text" class="form-control" name="addsOn"
+                            [(ngModel)]="model.addsOn"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="number" class="form-control" name="price" [(ngModel)]="model.price">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="save()">Save changes</button>
             </div>
         </div>
     </div>
