@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -34,14 +33,17 @@ export class ReservationComponent implements OnInit {
   invalidDate = false;
   prevDate = '';
 
+  isOthersSelected = false;
+  timeFrom = '';
+  timeTo = '';
+
   constructor(private packageService: PackageService,
     private menuService: MenuService,
     private toastr: ToastrService,
     public userService: UserService,
     private sanitizer: DomSanitizer,
     private reservationService: ReservationService,
-    private utilService: UtilityService,
-    private router: Router) { }
+    private utilService: UtilityService) { }
 
   ngOnInit(): void {
     this.getMenus();
@@ -111,21 +113,17 @@ export class ReservationComponent implements OnInit {
         });
   }
 
-  logout() {
-    Swal.fire({
-      title: 'Logout',
-      text: "Are you sure you want to Logout?",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        sessionStorage.clear();
-        this.router.navigate(['/home']);
-      }
-    });
+  occasionChange() {
+    if (this.model.occasion === 'Others') {
+      this.model.occasion = '';
+      this.isOthersSelected = true;
+    } else {
+      this.isOthersSelected = false;
+    }
+  }
+
+  onTimeChange(value: string) {
+    console.log(value);
   }
 
   addPackageToCart(item: Package) {
@@ -169,7 +167,6 @@ export class ReservationComponent implements OnInit {
 
   getReservationByDate(date: string) {
     if (!date) {
-      this.toastr.error('Please select a date.')
       return;
     }
     if (this.prevDate === date) {
@@ -219,8 +216,12 @@ export class ReservationComponent implements OnInit {
       this.toastr.error('Date of Event is required.');
       return;
     }
-    if (!this.model.time) {
-      this.toastr.error('Time of Event is required.');
+    if (!this.timeFrom) {
+      this.toastr.error('Time of Event From is required.');
+      return;
+    }
+    if (!this.timeTo) {
+      this.toastr.error('Time of Event To is required.');
       return;
     }
     if (!this.model.tableService) {
@@ -239,6 +240,10 @@ export class ReservationComponent implements OnInit {
       this.toastr.error('Payment Option is required.');
       return;
     }
+    if (!this.model.paymentMethod) {
+      this.toastr.error('Payment Method is required.');
+      return;
+    }
 
     if (!this.model.packages?.length && !this.model.menus?.length) {
       this.toastr.error('Please select at least a package or menu.');
@@ -255,6 +260,7 @@ export class ReservationComponent implements OnInit {
       confirmButtonText: 'Yes'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.model.time = `${this.timeFrom}-${this.timeTo}`;
         this.save();
       }
     });
@@ -276,6 +282,9 @@ export class ReservationComponent implements OnInit {
           this.menus.map(x => {
             x.quantity = 0;
           });
+          this.isOthersSelected = false;
+          this.timeFrom = '';
+          this.timeTo = '';
           Swal.fire(
             'Success!',
             'Your reservation request is successfully submitted. Kindly wait for our call to confirm your reservation. Thank you!',

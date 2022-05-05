@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { timer } from 'rxjs';
@@ -15,6 +15,7 @@ import { UserService } from '../shared/services/user.service';
 })
 export class LoginComponent implements OnInit, AfterViewInit {
 
+  @Input() track: boolean;
   @Output() ngModalClose = new EventEmitter<boolean>();
 
   modal: BsModalService;
@@ -143,7 +144,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
           if (this.model.admin) {
             this.router.navigate(['/admin-reservation']);
           } else {
-            this.router.navigate(['/client-reservation']);
+            if (this.track) {
+              this.router.navigate(['/track-reservation']);
+            } else {
+              this.router.navigate(['/client-reservation']);
+            }
           }
         } else {
           this.toastr.error(`${httpResponse.message}`);

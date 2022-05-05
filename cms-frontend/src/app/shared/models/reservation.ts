@@ -15,6 +15,7 @@ export class Reservation {
         public motif = '',
         public theme = '',
         public paymentOption = '',
+        public paymentMethod = '',
         public amountDue = 0,
         public amountPaid = 0,
         public status = '',

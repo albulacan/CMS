@@ -9,6 +9,7 @@
     <div>
         <button type="button" class="btn btn-info mr-2" (click)="reserveNow()"><i class="fa fa-calendar"></i> Reserve
             Now</button>
+        <button type="button" class="btn btn-light mr-2" (click)="track()"><i class="fa fa-search"></i> Track Reservation</button>
     </div>
 </div>
 
@@ -24,35 +25,35 @@
             <div class="col-lg-6">
                 <ngb-carousel>
                     <ng-template ngbSlide>
-                        <img src="assets/images/carousel/image1.jpg" class="d-block w-100" alt="1st">
+                        <img src="assets/images/carousel/img1.jpg" class="d-block w-100" alt="1st">
                         <div class="carousel-caption">
                             <h3>Events</h3>
                             <p>We can decorate for your event.</p>
                         </div>
                     </ng-template>
                     <ng-template ngbSlide>
-                        <img src="assets/images/carousel/image2.jpg" class="d-block w-100" alt="2nd">
+                        <img src="assets/images/carousel/img2.jpg" class="d-block w-100" alt="2nd">
                         <div class="carousel-caption">
                             <h3>Events</h3>
                             <p>We can decorate for your event.</p>
                         </div>
                     </ng-template>
                     <ng-template ngbSlide>
-                        <img src="assets/images/carousel/image3.jpg" class="d-block w-100" alt="3rd">
+                        <img src="assets/images/carousel/img3.jpg" class="d-block w-100" alt="3rd">
                         <div class="carousel-caption">
                             <h3>Events</h3>
                             <p>We can decorate for your event.</p>
                         </div>
                     </ng-template>
                     <ng-template ngbSlide>
-                        <img src="assets/images/carousel/image4.jpg" class="d-block w-100" alt="4th">
+                        <img src="assets/images/carousel/img4.jpg" class="d-block w-100" alt="4th">
                         <div class="carousel-caption">
                             <h3>Events</h3>
                             <p>We can decorate for your event.</p>
                         </div>
                     </ng-template>
                     <ng-template ngbSlide>
-                        <img src="assets/images/carousel/image5.jpg" class="d-block w-100" alt="5th">
+                        <img src="assets/images/carousel/img5.jpg" class="d-block w-100" alt="5th">
                         <div class="carousel-caption">
                             <h3>Events</h3>
                             <p>We can decorate for your event.</p>
@@ -123,7 +124,7 @@
         <div class="row mb-2">
             <div class="col-lg-3">
                 <select class="form-control" name="category" [(ngModel)]="selectedCategory">
-                    <option value="">Select Category</option>
+                    <option value="">Menu Category</option>
                     <option value="Pork">Pork</option>
                     <option value="Beef">Beef</option>
                     <option value="Chicken">Chicken</option>
@@ -146,4 +147,4 @@
 <app-footer></app-footer>
 
 
-<app-login *ngIf="showLogin" (ngModalClose)="showLogin = false"></app-login>
+<app-login *ngIf="showLogin" (ngModalClose)="showLogin = false" [track]="trackReservation"></app-login>

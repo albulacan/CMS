@@ -6,9 +6,11 @@ import { InvoiceComponent } from './admin/admin-reservations/invoice/invoice.com
 import { MenuManagementComponent } from './admin/menu-management/menu-management.component';
 import { PackageManagementComponent } from './admin/package-management/package-management.component';
 import { SalesReportComponent } from './admin/sales-report/sales-report.component';
+import { AppointmentComponent } from './appointment/appointment.component';
 import { HomeComponent } from './home/home.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AuthGuard } from './shared/directives/guard/auth.guard';
+import { TrackReservationComponent } from './track-reservation/track-reservation.component';
 
 
 const routes: Routes = [
@@ -59,6 +61,16 @@ const routes: Routes = [
   {
     path: 'client-reservation',
     component: ReservationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'track-reservation',
+    component: TrackReservationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'set-appointment',
+    component: AppointmentComponent,
     canActivate: [AuthGuard]
   },
   {

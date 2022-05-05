@@ -8,6 +8,9 @@ import { MenuComponent } from './components/menu/menu.component';
 import { BsDatepickerDirective } from './directives/attribute/bs-datepicker.directive';
 import { PackageComponent } from './components/package/package.component';
 import { FormsModule } from '@angular/forms';
+import { TimeFormatDirective } from './directives/attribute/time-format.directive';
+import { MaxLengthDirective } from './directives/attribute/max-length.directive';
+import { TogglePasswordDirective } from './directives/attribute/toggle-password.directive';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,10 @@ import { FormsModule } from '@angular/forms';
     BsSelectComponent,
     MenuComponent,
     BsDatepickerDirective,
-    PackageComponent
+    PackageComponent,
+    TimeFormatDirective,
+    MaxLengthDirective,
+    TogglePasswordDirective
   ],
   exports: [
     BlockUiDirective,
@@ -26,7 +32,10 @@ import { FormsModule } from '@angular/forms';
     BsSelectComponent,
     MenuComponent,
     BsDatepickerDirective,
-    PackageComponent
+    PackageComponent,
+    TimeFormatDirective,
+    MaxLengthDirective,
+    TogglePasswordDirective
   ],
   imports: [
     CommonModule,

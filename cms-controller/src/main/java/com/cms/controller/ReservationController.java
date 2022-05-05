@@ -24,7 +24,7 @@ import com.cms.repository.ReservationRepository;
 public class ReservationController {
 	
 	@PostMapping("/get-data-grid")
-	public HttpResponse<DataGridResponse<Reservation>> getDataGridRoomMaster(@RequestBody DataGridRequest<Reservation> request) {
+	public HttpResponse<DataGridResponse<Reservation>> getDataGridReservationMaster(@RequestBody DataGridRequest<Reservation> request) {
 		ReservationRepository repo = null;
 		try {
 			repo = new ReservationRepository();
@@ -73,6 +73,26 @@ public class ReservationController {
 			repo = new ReservationRepository();
 			request = repo.getByDate(request.getDate());
 			return HttpResponse.success(request);
+		} catch (Exception e) {
+			System.out.println(e);
+			return HttpResponse.failed(e.getMessage());
+		} finally {
+			repo.dispose();
+		}
+	}
+	
+	@GetMapping("/get-by-user/{userId}")
+	public HttpResponse<List<Reservation>> getByYear(@PathVariable(value="userId") long userId) {
+		ReservationRepository repo = null;
+		try {
+			repo = new ReservationRepository();
+			List<Reservation> result = repo.getAllByUserId(userId);
+			for (Reservation item: result) {
+				item.setPackages(repo.getPackages(item.getReservationId()));
+				item.setMenus(repo.getMenus(item.getReservationId()));
+				item.setUser(repo.getUserById(item.getUserId()));
+			}
+			return HttpResponse.success(result);
 		} catch (Exception e) {
 			System.out.println(e);
 			return HttpResponse.failed(e.getMessage());

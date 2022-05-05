@@ -17,6 +17,11 @@ export class ReservationService {
     return this.httpClient.post(url, model);
   }
 
+  public getByUserId(userId: number) {
+    const url = `${this.apiUrl}/get-by-user/${userId}`;
+    return this.httpClient.get(url);
+  }
+
   public getByYear(year: string) {
     const url = `${this.apiUrl}/get-by-year/${year}`;
     return this.httpClient.get(url);

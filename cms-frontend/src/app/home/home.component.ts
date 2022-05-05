@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
   packages = [] as Package[];
   showLogin = false;
   selectedCategory = '';
+  trackReservation = false;
 
   constructor(private menuService: MenuService,
     private packageService: PackageService,
@@ -111,6 +112,16 @@ export class HomeComponent implements OnInit {
     if (this.userService.userDetails.isAuthenticated && !this.userService.userDetails.admin) {
       this.router.navigate(['/client-reservation']);
     } else {
+      this.trackReservation = false;
+      this.showLogin = true;
+    }
+  }
+
+  track() {
+    if (this.userService.userDetails.isAuthenticated && !this.userService.userDetails.admin) {
+      this.router.navigate(['/track-reservation']);
+    } else {
+      this.trackReservation = true;
       this.showLogin = true;
     }
   }

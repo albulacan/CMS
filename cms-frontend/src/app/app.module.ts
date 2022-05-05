@@ -20,6 +20,9 @@ import { ReservationComponent } from './reservation/reservation.component';
 import { FooterComponent } from './footer/footer.component';
 import { InvoiceComponent } from './admin/admin-reservations/invoice/invoice.component';
 import { SalesReportComponent } from './admin/sales-report/sales-report.component';
+import { TrackReservationComponent } from './track-reservation/track-reservation.component';
+import { ClientNavComponent } from './client-nav/client-nav.component';
+import { AppointmentComponent } from './appointment/appointment.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +38,9 @@ import { SalesReportComponent } from './admin/sales-report/sales-report.componen
     FooterComponent,
     InvoiceComponent,
     SalesReportComponent,
+    TrackReservationComponent,
+    ClientNavComponent,
+    AppointmentComponent,
   ],
   imports: [
     BrowserAnimationsModule,

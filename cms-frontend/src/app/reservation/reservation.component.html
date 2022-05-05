@@ -1,24 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <img src="./assets/images/logo.png" class="navbar-brand-img" alt="..." style="width: 50px">
-    <a class="navbar-brand ml-2">Eric Eugenio's Catering Services</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-user-circle"></i> {{userService.userDetails.firstName}} {{userService.userDetails.middleName}} {{userService.userDetails.lastName}}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" (click)="logout()">Logout</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-</nav>
+<app-client-nav></app-client-nav>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
     <path fill="#6ca6e1" fill-opacity="1"
@@ -49,16 +29,17 @@
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Occasion</label>
-                    <select class="form-control" name="ocassion" [(ngModel)]="model.occasion">
+                    <select *ngIf="!isOthersSelected" class="form-control" name="ocassion" (change)="occasionChange()" [(ngModel)]="model.occasion">
                         <option value="">Select Occasion</option>
-                        <option value="Birthday Event">Birthday Event</option>
-                        <option value="Anniversary Event">Anniversary Event</option>
-                        <option value="Debut Event">Debut Event</option>
+                        <option value="Birthday">Birthday</option>
+                        <option value="Anniversary">Anniversary</option>
+                        <option value="Debut">Debut</option>
                         <option value="Corporate Meeting">Corporate Meeting</option>
-                        <option value="Wedding Event">Wedding Event</option>
-                        <option value="Baptism Evem">Baptism Evem</option>
+                        <option value="Wedding">Wedding</option>
+                        <option value="Baptismal">Baptismal</option>
                         <option value="Others">Others</option>
                     </select>
+                    <input *ngIf="isOthersSelected" type="text" class="form-control" name="ocassion" placeholder="Occasion" [(ngModel)]="model.occasion">
                 </div>
             </div>
             <div class="col-lg-4">
@@ -73,17 +54,18 @@
                 <div class="form-group">
                     <label>Date of Event</label>
                     <input type="text" class="form-control" name="date" placeholder="Date of Event" [ngModel]="model.date" (ngChangeDate)="getReservationByDate($event)"
-                        [appBsDatepicker]="{ disablePastAndPresentDate: true }">
+                        [appBsDatepicker]="{ disablePastAndPresentDate: false }">
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Time of Event</label>
-                    <select class="form-control" name="time" [(ngModel)]="model.time">
-                        <option value="">Select Time</option>
-                        <option value="11:00am - 3:00pm">11:00am - 03:00pm</option>
-                        <option value="05:00pm - 09:00pm">05:00pm - 09:00pm</option>
-                    </select>
+                    <div class="form-inline">
+                        From:&nbsp;<input type="text" class="form-control w-30" appTimeFormat [appMaxLength]="'5'" name="timeFrom" placeholder="00:00" [(ngModel)]="timeFrom">
+                        &nbsp;-&nbsp;
+                        <input type="text" class="form-control w-30" appTimeFormat [appMaxLength]="'5'" name="timeTo" placeholder="00:00" [(ngModel)]="timeTo">
+                    </div>
+                    <small id="timeHelp" class="form-text text-muted font-italic">Time must be in 24 hour format.</small>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -123,6 +105,18 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select class="form-control" name="paymentMethod" [(ngModel)]="model.paymentMethod">
+                        <option value="">Select Payment Method</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Gcash">Gcash</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <div class="text-right">
             <button type="button" class="btn btn-info" [disabled]="invalidDate" (click)="submit()"><i class="fa fa-floppy-o"></i> Submit</button>
         </div>
@@ -158,7 +152,7 @@
         <div class="row mb-2" [appBlockUi]="isProcessing">
             <div class="col-lg-3">
                 <select class="form-control" name="category" [(ngModel)]="selectedCategory">
-                    <option value="">Select Category</option>
+                    <option value="">Menu Category</option>
                     <option value="Pork">Pork</option>
                     <option value="Beef">Beef</option>
                     <option value="Chicken">Chicken</option>

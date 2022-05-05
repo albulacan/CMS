@@ -8,7 +8,7 @@
             <div class="login-header">
                 <button class="btn btn-link" (click)="login()">LOGIN</button> | <button class="btn btn-link"
                     (click)="signup()">SIGN UP</button>
-                <small class="form-text text-muted"><em>You must login first for reservation.</em></small>
+                <small class="form-text text-muted"><em>You must login first {{track ? 'to track your reservation' : 'for reservation'}}.</em></small>
             </div>
             <div class="login-form">
                 <div *ngIf="isLogin">
@@ -28,7 +28,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
                                 </div>
-                                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password">
+                                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password" appTogglePassword>
                             </div>
                         </div>
                         <button type="button" class="btn btn-link float-left" style="font-size: 14px !important;" (click)="resetPassword()">Forgot password?</button>
@@ -99,7 +99,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
                                 </div>
-                                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password">
+                                <input type="password" class="form-control" name="password" placeholder="Password" [(ngModel)]="model.password" appTogglePassword>
                             </div>
                         </div>
                         <div class="form-group">
@@ -108,7 +108,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></div>
                                 </div>
-                                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" [(ngModel)]="model.confirmPassword">
+                                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" [(ngModel)]="model.confirmPassword" appTogglePassword>
                             </div>
                         </div>
                         <div class="text-right">

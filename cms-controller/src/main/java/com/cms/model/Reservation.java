@@ -19,6 +19,7 @@ public class Reservation {
 	private String motif;
 	private String theme;
 	private String paymentOption;
+	private String paymentMethod;
 	private BigDecimal amountDue;
 	private BigDecimal amountPaid;
 	private String status;
@@ -102,6 +103,12 @@ public class Reservation {
 	}
 	public void setPaymentOption(String paymentOption) {
 		this.paymentOption = paymentOption;
+	}
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 	public BigDecimal getAmountDue() {
 		return amountDue;

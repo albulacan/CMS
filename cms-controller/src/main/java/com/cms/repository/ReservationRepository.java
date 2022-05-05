@@ -34,6 +34,14 @@ public class ReservationRepository extends DbWorker {
 		return sqlResult.getObject();
 	}
 	
+	public List<Reservation> getAllByUserId(long userId) throws Exception {
+		SQLResult<List<Reservation>> sqlResult = SelectRecords(String.format("SELECT * FROM dbo.Reservation WHERE UserId = %d", userId), SQLCommandType.Text, Reservation.class);
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		return sqlResult.getObject();
+	}
+	
 	public List<Reservation> getAllByYear(String year) throws Exception {
 		SQLResult<List<Reservation>> sqlResult = SelectRecords(String.format("SELECT MAX(CreatedOn) CreatedOn, SUM(AmountDue) AmountDue FROM dbo.Reservation WHERE DATEPART(YEAR, CreatedOn) = '%s' GROUP BY DATEADD(MONTH, DATEDIFF(MONTH, 0, CreatedOn), 0)", year), SQLCommandType.Text, Reservation.class);
 		if (!sqlResult.isSuccess()) {
@@ -97,6 +105,7 @@ public class ReservationRepository extends DbWorker {
 		AddParameter("Motif", request.getMotif(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		AddParameter("Theme", request.getTheme(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		AddParameter("PaymentOption", request.getPaymentOption(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		AddParameter("PaymentMethod", request.getPaymentMethod(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		AddParameter("AmountDue", request.getAmountDue(), JDBCType.DECIMAL, ParameterDirection.IN);
 		AddParameter("AmountPaid", request.getAmountPaid(), JDBCType.DECIMAL, ParameterDirection.IN);
 		AddParameter("Status", request.getStatus(), JDBCType.NVARCHAR, ParameterDirection.IN);

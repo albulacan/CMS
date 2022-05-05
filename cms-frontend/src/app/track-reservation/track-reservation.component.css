@@ -1,0 +1,12 @@
+svg {
+    position: relative;
+    background: #ffffff;
+    text-align: center;
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 900px) {
+    .large-screen-only {
+        display: none;
+    }
+}

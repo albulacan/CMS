@@ -141,7 +141,7 @@ public class UserController {
 			} else {
 				return new ResponseEntity<String>("Invalid activation link.", HttpStatus.OK);
 			}
-			return new ResponseEntity<String>("Account successfully acitvated. <a href='https://ericeugenioscatering.000webhostapp.com'>Click this link to login.</a>", HttpStatus.OK);
+			return new ResponseEntity<String>("Account successfully acitvated. <a href='https://ericeugenioscateringservices.com'>Click this link to login.</a>", HttpStatus.OK);
 		} catch (Exception e) {
 			System.out.println(e);
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
