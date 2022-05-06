@@ -22,6 +22,7 @@ export class MenuManagementComponent implements OnInit {
   grid: DataGridServerService<Menu>;
   model: Menu = new Menu();
   modal: BsModalService;
+  filter = new Menu();
   isProcessing = false;
 
   constructor(private dgFactory: DataGridFactory,
@@ -32,7 +33,7 @@ export class MenuManagementComponent implements OnInit {
 
   ngOnInit(): void {
     const url = `${environment.apiUrl}menu/get-data-grid`;
-    this.grid = this.dgFactory.post({ url }, new Menu());
+    this.grid = this.dgFactory.post({ url }, this.filter);
   }
 
   getImage(item: Menu) {

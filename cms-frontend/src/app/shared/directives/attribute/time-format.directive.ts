@@ -21,8 +21,8 @@ export class TimeFormatDirective {
   private formatTime(value: string) {
       const length = value.length;
 
-      if (+value.substring(0, 2) > 23) {
-        value = 23 + ':' + value.substring(2, length);
+      if (+value.substring(0, 2) > 12) {
+        value = 12 + ':' + value.substring(2, length);
       }
 
       if (length > 2) {

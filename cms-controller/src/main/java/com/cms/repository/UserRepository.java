@@ -120,7 +120,7 @@ public class UserRepository extends DbWorker {
 	}
 	
 	public void setOTP(long userId, String otp) throws Exception {
-		SQLResult<?> sqlResult = SaveRecordAutoCommit(String.format("INSERT INTO dbo.OTP (UserId, OTP, GeneratedOn) VALUES (%d, '%s', GETDATE())", userId, otp), SQLCommandType.Text);
+		SQLResult<?> sqlResult = SaveRecordAutoCommit(String.format("INSERT INTO dbo.OTP (UserId, OTP, GeneratedOn) VALUES (%d, '%s', DATEADD(HH, 15,GETDATE()))", userId, otp), SQLCommandType.Text);
 		
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());

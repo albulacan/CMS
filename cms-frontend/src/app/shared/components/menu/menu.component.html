@@ -14,10 +14,10 @@
         <div *ngIf="showAddToCart" class="mt-2 pl-3 pr-3">
             <div class="row">
                 <div class="col-6">
-                    <input type="number" class="form-control" name="quantity" placeholder="Quantity" min="0" [(ngModel)]="item.quantity">
+                    <input type="number" min="0" class="form-control" name="quantity" placeholder="Quantity" min="0" [(ngModel)]="item.quantity">
                 </div>
                 <div class="col-6">
-                    <button class="btn btn-success w-100" (click)="addToCart(item)"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+                    <button class="btn btn-success w-100" (click)="addToCart(item)"><i class="fa fa-cart-plus"></i> Add to Order</button>
                 </div>
             </div>
         </div>

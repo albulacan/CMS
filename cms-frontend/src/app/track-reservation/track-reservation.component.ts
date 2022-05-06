@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 import { IHttpResponse } from '../shared/models/http-response';
-import { Reservation } from '../shared/models/reservation';
+import { Payment, Reservation } from '../shared/models/reservation';
 import { ReservationService } from '../shared/services/reservation.service';
 import { UserService } from '../shared/services/user.service';
 
@@ -46,6 +46,13 @@ export class TrackReservationComponent implements OnInit {
 
   view(item: Reservation) {
     this.model = JSON.parse(JSON.stringify(item));
+  }
+
+  download(item: Payment) {
+    const a = document.createElement('a');
+    a.download = item.fileName;
+    a.href = item.attachment;
+    a.click();
   }
 
   get totalItems() {

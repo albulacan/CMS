@@ -7,12 +7,12 @@ import { BsModalService } from '../shared/directives/attribute/bs-modal.service'
 import { IHttpResponse } from '../shared/models/http-response';
 import { Menu } from '../shared/models/menu';
 import { Package } from '../shared/models/package';
-import { Reservation } from '../shared/models/reservation';
+import { Payment, Reservation } from '../shared/models/reservation';
 import { MenuService } from '../shared/services/menu.service';
 import { PackageService } from '../shared/services/package.service';
 import { ReservationService } from '../shared/services/reservation.service';
 import { UserService } from '../shared/services/user.service';
-import { UtilityService } from '../shared/services/utility.service';
+import { UtilityService, _File } from '../shared/services/utility.service';
 
 @Component({
   selector: 'app-reservation',
@@ -25,6 +25,7 @@ export class ReservationComponent implements OnInit {
   menus = [] as Menu[];
   packages = [] as Package[];
   model = new Reservation();
+  payment = new Payment();
 
   cartModal: BsModalService;
   selectedCategory = '';
@@ -35,7 +36,9 @@ export class ReservationComponent implements OnInit {
 
   isOthersSelected = false;
   timeFrom = '';
+  fromAM = 'AM';
   timeTo = '';
+  toAM = 'AM';
 
   constructor(private packageService: PackageService,
     private menuService: MenuService,
@@ -124,6 +127,13 @@ export class ReservationComponent implements OnInit {
 
   onTimeChange(value: string) {
     console.log(value);
+  }
+
+  onAttachmentChange(event: any) {
+    this.utilService.getBase64(event).then((data: _File) => {
+      this.payment.attachment = data?.base64;
+      this.payment.fileName = data?.fileName;
+    });
   }
 
   addPackageToCart(item: Package) {
@@ -244,6 +254,20 @@ export class ReservationComponent implements OnInit {
       this.toastr.error('Payment Method is required.');
       return;
     }
+    if (this.model.paymentMethod === 'Cash' && !this.model.appointmentDate) {
+      this.toastr.error('Appointment Date for Payment is required.');
+      return;
+    }
+    if (this.model.paymentMethod === 'Gcash') {
+      if (!+this.payment.amount) {
+        this.toastr.error('Amount Paid is required.');
+        return;
+      }
+      if (!this.payment.attachment) {
+        this.toastr.error('Proof of Payment is required.');
+        return;
+      }
+    }
 
     if (!this.model.packages?.length && !this.model.menus?.length) {
       this.toastr.error('Please select at least a package or menu.');
@@ -260,7 +284,10 @@ export class ReservationComponent implements OnInit {
       confirmButtonText: 'Yes'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.model.time = `${this.timeFrom}-${this.timeTo}`;
+        this.model.time = `${this.timeFrom}${this.fromAM}-${this.timeTo}${this.toAM}`;
+        if (this.model.paymentMethod === 'Gcash') {
+          this.model.payments.push(this.payment);
+        }
         this.save();
       }
     });
@@ -270,6 +297,7 @@ export class ReservationComponent implements OnInit {
     this.isProcessing = true;
     let httpResponse: IHttpResponse;
     this.model.date = this.utilService.toJsonDate(this.model.date);
+    this.model.appointmentDate = this.utilService.toJsonDate(this.model.appointmentDate);
     this.model.status = 'Pending';
     this.model.userId = this.userService.userDetails.userId;
     this.reservationService.save(this.model)
@@ -285,6 +313,8 @@ export class ReservationComponent implements OnInit {
           this.isOthersSelected = false;
           this.timeFrom = '';
           this.timeTo = '';
+          this.fromAM = 'AM';
+          this.toAM = 'AM';
           Swal.fire(
             'Success!',
             'Your reservation request is successfully submitted. Kindly wait for our call to confirm your reservation. Thank you!',

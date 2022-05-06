@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AdminAppointmentComponent } from './admin/admin-appointment/admin-appointment.component';
 import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 import { AdminReservationsComponent } from './admin/admin-reservations/admin-reservations.component';
 import { InvoiceComponent } from './admin/admin-reservations/invoice/invoice.component';
@@ -59,6 +60,14 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'admin-appointment',
+    component: AdminAppointmentComponent,
+    data: {
+      isAdmin: true
+    },
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'client-reservation',
     component: ReservationComponent,
     canActivate: [AuthGuard]
@@ -92,7 +101,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

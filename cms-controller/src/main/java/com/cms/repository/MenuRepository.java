@@ -19,6 +19,8 @@ public class MenuRepository extends DbWorker {
 	public List<Menu> getDataGrid(DataGridRequest<Menu> request) throws Exception {
 		AddParameter("Start", request.getStart(), JDBCType.INTEGER, ParameterDirection.IN);
 		AddParameter("Length", request.getLength(), JDBCType.INTEGER, ParameterDirection.IN);
+		AddParameter("Name", request.getSearch().getName(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		AddParameter("Category", request.getSearch().getCategory(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		
 		SQLResult<List<Menu>> sqlResult = SelectRecords("usp_cms_GetDataGridMenu", SQLCommandType.StoredProcedure, Menu.class);
 		

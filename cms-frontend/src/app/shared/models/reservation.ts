@@ -20,12 +20,24 @@ export class Reservation {
         public amountPaid = 0,
         public status = '',
         public createdOn = '',
+        public appointmentDate = '',
         
         public packages: Package[] = [],
         public menus: Menu[] = [],
+        public payments: Payment[] = [],
         
         public clientName: string = '',
         
         public user = new UserModel()) {
+    }
+}
+
+export class Payment {
+    constructor(public paymentId: number = 0,
+        public reservationId: number = 0,
+        public amount: number = 0,
+        public fileName: string = '',
+        public attachment: string = '',
+        public createdOn: string = '') {
     }
 }

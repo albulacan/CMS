@@ -20,6 +20,7 @@ export class PackageManagementComponent implements OnInit {
   grid: DataGridServerService<Package>;
   model: Package = new Package();
   modal: BsModalService;
+  filter = new Package();
   isProcessing = false;
 
   constructor(private dgFactory: DataGridFactory,
@@ -28,7 +29,7 @@ export class PackageManagementComponent implements OnInit {
 
   ngOnInit(): void {
     const url = `${environment.apiUrl}package/get-data-grid`;
-    this.grid = this.dgFactory.post({ url }, new Package());
+    this.grid = this.dgFactory.post({ url }, this.filter);
   }
 
   view(item: Package) {

@@ -23,6 +23,7 @@ import { SalesReportComponent } from './admin/sales-report/sales-report.componen
 import { TrackReservationComponent } from './track-reservation/track-reservation.component';
 import { ClientNavComponent } from './client-nav/client-nav.component';
 import { AppointmentComponent } from './appointment/appointment.component';
+import { AdminAppointmentComponent } from './admin/admin-appointment/admin-appointment.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { AppointmentComponent } from './appointment/appointment.component';
     TrackReservationComponent,
     ClientNavComponent,
     AppointmentComponent,
+    AdminAppointmentComponent,
   ],
   imports: [
     BrowserAnimationsModule,

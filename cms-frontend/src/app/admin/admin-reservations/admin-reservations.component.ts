@@ -5,7 +5,7 @@ import { BsModalService } from 'src/app/shared/directives/attribute/bs-modal.ser
 import { DataGridServerService } from 'src/app/shared/directives/attribute/data-grid-server.service';
 import { DataGridFactory } from 'src/app/shared/directives/attribute/data-grid.factory';
 import { IHttpResponse } from 'src/app/shared/models/http-response';
-import { Reservation } from 'src/app/shared/models/reservation';
+import { Payment, Reservation } from 'src/app/shared/models/reservation';
 import { ReservationService } from 'src/app/shared/services/reservation.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
@@ -94,7 +94,15 @@ export class AdminReservationsComponent implements OnInit {
   }
 
   generateInvoice() {
-    window.open(`${environment.webUrl}?invoice=${this.model.referenceNo}`);
+    const baseUrl = this.location.prepareExternalUrl(this.location.path());
+    window.open(`${baseUrl}/invoice/${this.model.referenceNo}`);
+  }
+
+  download(item: Payment) {
+    const a = document.createElement('a');
+    a.download = item.fileName;
+    a.href = item.attachment;
+    a.click();
   }
 
   get totalItem() {

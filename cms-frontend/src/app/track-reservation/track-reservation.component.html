@@ -57,33 +57,33 @@
             <div class="card-body text-dark text-left">
 
                 <form [appBlockUi]="isProcessing">
-                    <fieldset disabled>
+                    <fieldset>
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Reference No</label>
                                     <input type="text" class="form-control" name="refNo"
-                                        [(ngModel)]="model.referenceNo">
+                                        [(ngModel)]="model.referenceNo" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Status</label>
-                                    <input type="text" class="form-control" name="status" [(ngModel)]="model.status">
+                                    <input type="text" class="form-control" name="status" [(ngModel)]="model.status" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Venue</label>
                                     <input type="text" class="form-control" name="venue" placeholder="Venue"
-                                        [(ngModel)]="model.venue">
+                                        [(ngModel)]="model.venue" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Occasion</label>
                                     <input type="text" class="form-control" name="ocassion" placeholder="Occasion"
-                                        [(ngModel)]="model.occasion">
+                                        [(ngModel)]="model.occasion" disabled>
                                 </div>
                             </div>
                         </div>
@@ -91,22 +91,22 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>No of Pax</label>
-                                    <input type="number" class="form-control" name="pax" placeholder="No of Pax"
-                                        [(ngModel)]="model.pax">
+                                    <input type="number" min="0" class="form-control" name="pax" placeholder="No of Pax"
+                                        [(ngModel)]="model.pax" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Date of Event</label>
                                     <input type="text" class="form-control" name="date" placeholder="Date of Event"
-                                        [(ngModel)]="model.date">
+                                        [(ngModel)]="model.date" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Time of Event</label>
                                     <input type="text" class="form-control" name="time" placeholder="Date of Event"
-                                        [(ngModel)]="model.time">
+                                        [(ngModel)]="model.time" disabled>
                                     <small id="timeHelp" class="form-text text-muted font-italic">In 24 hour
                                         format.</small>
                                 </div>
@@ -115,7 +115,7 @@
                                 <div class="form-group">
                                     <label>Table Service</label>
                                     <input type="text" class="form-control" name="tableservice"
-                                        [(ngModel)]="model.tableService">
+                                        [(ngModel)]="model.tableService" disabled>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                                 <div class="form-group">
                                     <label>Event Motif</label>
                                     <input type="text" class="form-control" name="motif" placeholder="Motif"
-                                        [(ngModel)]="model.motif">
+                                        [(ngModel)]="model.motif" disabled>
                                     <small id="motifHelp" class="form-text text-muted font-italic">Color of your choice.
                                         Ex: Green</small>
                                 </div>
@@ -133,7 +133,7 @@
                                 <div class="form-group">
                                     <label>Theme</label>
                                     <input type="text" class="form-control" name="theme" placeholder="Theme"
-                                        [(ngModel)]="model.theme">
+                                        [(ngModel)]="model.theme" disabled>
                                     <small id="themeHelp" class="form-text text-muted font-italic">Theme of your choice.
                                         Ex: Garden</small>
                                 </div>
@@ -142,14 +142,39 @@
                                 <div class="form-group">
                                     <label>Payment Option</label>
                                     <input type="text" class="form-control" name="paymentoption"
-                                        [(ngModel)]="model.paymentOption">
+                                        [(ngModel)]="model.paymentOption" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Payment Method</label>
                                     <input type="text" class="form-control" name="paymentMethod"
-                                        [(ngModel)]="model.paymentMethod">
+                                        [(ngModel)]="model.paymentMethod" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3" *ngIf="model.paymentMethod === 'Cash'">
+                                <div class="form-group">
+                                    <label>Appointment Date for Payment</label>
+                                    <input type="text" class="form-control" name="aDate"
+                                        [value]="model.appointmentDate | date:'mediumDate'" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-3" *ngIf="model.paymentMethod === 'Gcash'">
+                                <div class="form-group">
+                                    <label>Payment Amount</label>
+                                    <input type="text" class="form-control" name="pAmount"
+                                        [value]="model.payments[0]?.amount | number:'1.2-2'" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-3" *ngIf="model.paymentMethod === 'Gcash'">
+                                <div class="form-group">
+                                    <label>Proof of Payment</label>
+                                    <div class="form-control">
+                                        <button class="btn btn-link"
+                                            (click)="download(model.payments[0])">Download</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -89,24 +89,27 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <fieldset disabled>
+                    <fieldset>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Client Name</label>
-                                    <input type="text" class="form-control" name="cname" [value]="model.clientName">
+                                    <input type="text" class="form-control" name="cname" [value]="model.clientName"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Email Address</label>
-                                    <input type="text" class="form-control" name="eadress" [value]="model.user.emailAddress">
+                                    <input type="text" class="form-control" name="eadress"
+                                        [value]="model.user.emailAddress" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Mobile Number</label>
-                                    <input type="text" class="form-control" name="mnumber" [value]="model.user.mobileNo">
+                                    <input type="text" class="form-control" name="mnumber" [value]="model.user.mobileNo"
+                                        disabled>
                                 </div>
                             </div>
                         </div>
@@ -115,29 +118,21 @@
                                 <div class="form-group">
                                     <label>Venue</label>
                                     <input type="text" class="form-control" name="venue" placeholder="Venue"
-                                        [(ngModel)]="model.venue">
+                                        [(ngModel)]="model.venue" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Occasion</label>
-                                    <select class="form-control" name="ocassion" [(ngModel)]="model.occasion">
-                                        <option value="">Select Occasion</option>
-                                        <option value="Birthday Event">Birthday Event</option>
-                                        <option value="Anniversary Event">Anniversary Event</option>
-                                        <option value="Debut Event">Debut Event</option>
-                                        <option value="Corporate Meeting">Corporate Meeting</option>
-                                        <option value="Wedding Event">Wedding Event</option>
-                                        <option value="Baptism Evem">Baptism Evem</option>
-                                        <option value="Others">Others</option>
-                                    </select>
+                                    <input type="text" class="form-control" name="occasion" [(ngModel)]="model.occasion"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>No of Pax</label>
-                                    <input type="number" class="form-control" name="pax" placeholder="No of Pax"
-                                        [(ngModel)]="model.pax">
+                                    <input type="number" min="0" class="form-control" name="pax" placeholder="No of Pax"
+                                        [(ngModel)]="model.pax" disabled>
                                 </div>
                             </div>
                         </div>
@@ -146,23 +141,21 @@
                                 <div class="form-group">
                                     <label>Date of Event</label>
                                     <input type="text" class="form-control" name="date" placeholder="Date of Event"
-                                        [ngModel]="model.date" [appBsDatepicker]="{ disablePastAndPresentDate: true }">
+                                        [ngModel]="model.date" [appBsDatepicker]="{ disablePastAndPresentDate: true }"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Time of Event</label>
-                                    <select class="form-control" name="time" [(ngModel)]="model.time">
-                                        <option value="">Select Time</option>
-                                        <option value="11:00am - 3:00pm">11:00am - 03:00pm</option>
-                                        <option value="05:00pm - 09:00pm">05:00pm - 09:00pm</option>
-                                    </select>
+                                    <input type="text" class="form-control" name="time" [value]="model.time" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Table Service</label>
-                                    <select class="form-control" name="tableservice" [(ngModel)]="model.tableService">
+                                    <select class="form-control" name="tableservice" [(ngModel)]="model.tableService"
+                                        disabled>
                                         <option value="">Select Table Service</option>
                                         <option value="Buffet">Buffet</option>
                                         <option value="Plated">Plated</option>
@@ -175,24 +168,57 @@
                                 <div class="form-group">
                                     <label>Event Motif</label>
                                     <input type="text" class="form-control" name="motif" placeholder="Motif"
-                                        [(ngModel)]="model.motif">
+                                        [(ngModel)]="model.motif" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Theme</label>
                                     <input type="text" class="form-control" name="theme" placeholder="Theme"
-                                        [(ngModel)]="model.theme">
+                                        [(ngModel)]="model.theme" disabled>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Payment Option</label>
-                                    <select class="form-control" name="paymentoption" [(ngModel)]="model.paymentOption">
+                                    <select class="form-control" name="paymentoption" [(ngModel)]="model.paymentOption"
+                                        disabled>
                                         <option value="">Select Payment Option</option>
                                         <option value="Down Payment">Down Payment</option>
                                         <option value="Full Payment">Full Payment</option>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Payment Method</label>
+                                    <input type="text" class="form-control" name="paymentMethod"
+                                        [(ngModel)]="model.paymentMethod" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" *ngIf="model.paymentMethod === 'Cash'">
+                                <div class="form-group">
+                                    <label>Appointment Date for Payment</label>
+                                    <input type="text" class="form-control" name="aDate"
+                                        [value]="model.appointmentDate | date:'mediumDate'" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" *ngIf="model.paymentMethod === 'Gcash'">
+                                <div class="form-group">
+                                    <label>Payment Amount</label>
+                                    <input type="text" class="form-control" name="pAmount"
+                                        [value]="model.payments[0]?.amount | number:'1.2-2'" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" *ngIf="model.paymentMethod === 'Gcash'">
+                                <div class="form-group">
+                                    <label>Proof of Payment</label>
+                                    <div class="form-control">
+                                        <button class="btn btn-link"
+                                            (click)="download(model.payments[0])">Download</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -249,7 +275,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Amount Paid</label>
-                                    <input type="number" class="form-control" name="amp" placeholder="Amount Paid"
+                                    <input type="number" min="0" class="form-control" name="amp" placeholder="Amount Paid"
                                         [(ngModel)]="amountPaid" (change)="calculateAmountPaid()">
                                 </div>
                             </div>
@@ -271,7 +297,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" (click)="generateInvoice()">Generate Invoice</button>
-                <button type="button" class="btn btn-info" [disabled]="origStatus === 'Cancelled' || origStatus === 'Completed'" (click)="update()">Save</button>
+                <button type="button" class="btn btn-info"
+                    [disabled]="origStatus === 'Cancelled' || origStatus === 'Completed'"
+                    (click)="update()">Save</button>
                 <button type="button" class="btn btn-secondary" (click)="detailModal.close()">Close</button>
             </div>
         </div>

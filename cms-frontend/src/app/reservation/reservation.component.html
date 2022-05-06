@@ -45,7 +45,7 @@
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>No of Pax</label>
-                    <input type="number" class="form-control" name="pax" placeholder="No of Pax" [(ngModel)]="model.pax">
+                    <input type="number" min="0" class="form-control" name="pax" placeholder="No of Pax" [(ngModel)]="model.pax">
                 </div>
             </div>
         </div>
@@ -61,11 +61,18 @@
                 <div class="form-group">
                     <label>Time of Event</label>
                     <div class="form-inline">
-                        From:&nbsp;<input type="text" class="form-control w-30" appTimeFormat [appMaxLength]="'5'" name="timeFrom" placeholder="00:00" [(ngModel)]="timeFrom">
+                        From:&nbsp;<input type="text" class="form-control w-20" appTimeFormat [appMaxLength]="'5'" name="timeFrom" placeholder="00:00" [(ngModel)]="timeFrom">
+                        <select class="form-control w-15 p-0" name="fromAM" [(ngModel)]="fromAM">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
                         &nbsp;-&nbsp;
-                        <input type="text" class="form-control w-30" appTimeFormat [appMaxLength]="'5'" name="timeTo" placeholder="00:00" [(ngModel)]="timeTo">
+                        <input type="text" class="form-control w-20" appTimeFormat [appMaxLength]="'5'" name="timeTo" placeholder="00:00" [(ngModel)]="timeTo">
+                        <select class="form-control w-15 p-0" name="toAM" [(ngModel)]="toAM">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
                     </div>
-                    <small id="timeHelp" class="form-text text-muted font-italic">Time must be in 24 hour format.</small>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -116,6 +123,28 @@
                     </select>
                 </div>
             </div>
+            <div class="col-lg-4" *ngIf="model.paymentMethod === 'Cash'">
+                <div class="form-group">
+                    <label>Appointment Date for Payment</label>
+                    <input type="text" class="form-control" name="dateA" placeholder="Date of Appointment" [ngModel]="model.appointmentDate" (ngChangeDate)="model.appointmentDate = $event"
+                        [appBsDatepicker]="{ disablePastAndPresentDate: false }">
+                </div>
+            </div>
+            <div class="col-lg-4" *ngIf="model.paymentMethod === 'Gcash'">
+                <div class="form-group">
+                    <label>Payment Amount</label>
+                    <input type="number" min="0" class="form-control" name="amt" [(ngModel)]="payment.amount">
+                </div>
+            </div>
+            <div class="col-lg-4" *ngIf="model.paymentMethod === 'Gcash'">
+                <div class="form-group">
+                    <label>Proof of Payment</label>
+                    <input type="file" class="form-control" name="img" (change)="onAttachmentChange($event)">
+                </div>
+            </div>
+        </div>
+        <div *ngIf="model.paymentMethod === 'Gcash'" class="alert alert-info font-italic" role="alert">
+            For GCASH payment, kindly send your payment to our GCASH ACCOUNT: <strong>(0916) 436 4009</strong>
         </div>
         <div class="text-right">
             <button type="button" class="btn btn-info" [disabled]="invalidDate" (click)="submit()"><i class="fa fa-floppy-o"></i> Submit</button>
@@ -135,7 +164,7 @@
         <div class="row" [appBlockUi]="isProcessing">
             <div class="col-lg-4 col-xs-1" style="margin-bottom: 25px;" *ngFor="let item of packages">
                 <app-package [item]="item"></app-package>
-                <button class="btn btn-success mt-2" (click)="addPackageToCart(item)"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+                <button class="btn btn-success mt-2" (click)="addPackageToCart(item)"><i class="fa fa-cart-plus"></i> Add to Order</button>
             </div>
         </div>
     </div>
@@ -158,7 +187,11 @@
                     <option value="Chicken">Chicken</option>
                     <option value="Fish">Fish</option>
                     <option value="Vegetable">Vegetable</option>
-                    <option value="Pasta">Pasta</option>
+                    <option value="Pasta">Noodles/Pasta</option>
+                    <option value="Appetizer/Pulutan">Appetizer/Pulutan</option>
+                    <option value="Seafoods">Seafoods</option>
+                    <option value="Soup with Meat">Soup with Meat</option>
+                    <option value="Soup without Meat">Soup without Meat</option>
                     <option value="Drinks">Drinks</option>
                     <option value="Dessert">Dessert</option>
                     <option value="Others">Others</option>

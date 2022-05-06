@@ -19,6 +19,7 @@ public class PackageRepository extends DbWorker {
 	public List<PackageModel> getDataGrid(DataGridRequest<PackageModel> request) throws Exception {
 		AddParameter("Start", request.getStart(), JDBCType.INTEGER, ParameterDirection.IN);
 		AddParameter("Length", request.getLength(), JDBCType.INTEGER, ParameterDirection.IN);
+		AddParameter("Name", request.getSearch().getName(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		
 		SQLResult<List<PackageModel>> sqlResult = SelectRecords("usp_cms_GetDataGridPackage", SQLCommandType.StoredProcedure, PackageModel.class);
 		

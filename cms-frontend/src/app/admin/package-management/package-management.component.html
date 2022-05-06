@@ -1,8 +1,23 @@
 <div class="container pt-2">
     <h3>Packages</h3>
-    <button class="btn btn-success float-right" (click)="add()"><i class="fa fa-plus"></i> Add Package</button>
     <br />
-    <br />
+    <form (submit)="grid.load()">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-3 col-form-label">Name:</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="name" name="name"
+                            placeholder="Name" [(ngModel)]="filter.name">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-right">
+                <button type="submit" class="btn btn-info mr-2"><i class="fa fa-search"></i> Search</button>
+                <button type="button" class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add Package</button>
+            </div>
+        </div>
+    </form>
     <div class="col-12 data-grid-container">
         <table class="table" [appBlockUi]="grid?.isProcessing || isProcessing">
             <thead>
@@ -10,7 +25,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">No. of Pax</th>
                     <th scope="col">Menu Choices</th>
-                    <th scope="col">Adds On</th>
+                    <th scope="col">Additional Excess</th>
                     <th scope="col">Price</th>
                     <th scope="col">Action</th>
                 </tr>
@@ -71,7 +86,7 @@
                     </div>
                     <div class="form-group">
                         <label>No. Of Pax</label>
-                        <input type="number" class="form-control" name="pax" [(ngModel)]="model.pax">
+                        <input type="number" min="0" class="form-control" name="pax" [(ngModel)]="model.pax">
                     </div>
                     <div class="form-group">
                         <label>Additional</label>
@@ -80,7 +95,7 @@
                     </div>
                     <div class="form-group">
                         <label>Price</label>
-                        <input type="number" class="form-control" name="price" [(ngModel)]="model.price">
+                        <input type="number" min="0" class="form-control" name="price" [(ngModel)]="model.price">
                     </div>
                 </form>
             </div>

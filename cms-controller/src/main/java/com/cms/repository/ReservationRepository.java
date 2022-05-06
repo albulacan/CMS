@@ -4,9 +4,11 @@ import java.sql.Date;
 import java.sql.JDBCType;
 import java.util.List;
 
+import com.cms.model.Appointment;
 import com.cms.model.DataGridRequest;
 import com.cms.model.Menu;
 import com.cms.model.PackageModel;
+import com.cms.model.Payment;
 import com.cms.model.Reservation;
 import com.cms.model.User;
 import com.db.lib.DbWorker;
@@ -59,8 +61,24 @@ public class ReservationRepository extends DbWorker {
 		return sqlResult.getObject();
 	}
 	
+	public Reservation getById(long reservationId) throws Exception {
+		SQLResult<Reservation> sqlResult = SelectRecord(String.format("SELECT * FROM dbo.[Reservation] WHERE ReservationId = %d", reservationId), SQLCommandType.Text, Reservation.class);
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		return sqlResult.getObject();
+	}
+	
 	public Reservation getByReferenceNo(String referenceNo) throws Exception {
 		SQLResult<Reservation> sqlResult = SelectRecord(String.format("SELECT * FROM dbo.[Reservation] WHERE ReferenceNo = '%s'", referenceNo), SQLCommandType.Text, Reservation.class);
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		return sqlResult.getObject();
+	}
+	
+	public Reservation getByReferenceNoAndUser(String referenceNo, long userId) throws Exception {
+		SQLResult<Reservation> sqlResult = SelectRecord(String.format("SELECT * FROM dbo.[Reservation] WHERE ReferenceNo = '%s' AND UserId = %d", referenceNo, userId), SQLCommandType.Text, Reservation.class);
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());
 		}
@@ -106,6 +124,7 @@ public class ReservationRepository extends DbWorker {
 		AddParameter("Theme", request.getTheme(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		AddParameter("PaymentOption", request.getPaymentOption(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		AddParameter("PaymentMethod", request.getPaymentMethod(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		AddParameter("AppointmentDate", request.getAppointmentDate(), JDBCType.DATE, ParameterDirection.IN);
 		AddParameter("AmountDue", request.getAmountDue(), JDBCType.DECIMAL, ParameterDirection.IN);
 		AddParameter("AmountPaid", request.getAmountPaid(), JDBCType.DECIMAL, ParameterDirection.IN);
 		AddParameter("Status", request.getStatus(), JDBCType.NVARCHAR, ParameterDirection.IN);
@@ -148,6 +167,40 @@ public class ReservationRepository extends DbWorker {
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());
 		}
+	}
+	
+	public void saveAppointment(Appointment request) throws Exception {
+		AddParameter("ReferenceNo", request.getReferenceNo(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		AddParameter("Date", request.getDate(), JDBCType.DATE, ParameterDirection.IN);
+		AddParameter("Time", request.getTime(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		AddParameter("UserId", request.getUserId(), JDBCType.BIGINT, ParameterDirection.IN);
+		
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit("usp_cms_SaveAppointment", SQLCommandType.StoredProcedure);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+	}
+	
+	public void savePayment(Payment request) throws Exception {
+		AddParameter("ReservationId", request.getReservationId(), JDBCType.BIGINT, ParameterDirection.IN);
+		AddParameter("Amount", request.getAmount(), JDBCType.DECIMAL, ParameterDirection.IN);
+		AddParameter("FileName", request.getFileName(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		AddParameter("Attachment", request.getAttachment(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit("usp_cms_SavePayment", SQLCommandType.StoredProcedure);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+	}
+	
+	public List<Payment> getPayments(long reservationId) throws Exception {
+		SQLResult<List<Payment>> sqlResult = SelectRecords(String.format("SELECT * FROM dbo.Payment WHERE ReservationId = %d", reservationId), SQLCommandType.Text, Payment.class);
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		return sqlResult.getObject();
 	}
 
 }

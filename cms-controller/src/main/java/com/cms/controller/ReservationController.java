@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cms.model.Appointment;
 import com.cms.model.DataGridRequest;
 import com.cms.model.DataGridResponse;
 import com.cms.model.HttpResponse;
 import com.cms.model.Menu;
 import com.cms.model.PackageModel;
+import com.cms.model.Payment;
 import com.cms.model.Reservation;
 import com.cms.repository.ReservationRepository;
 
@@ -33,6 +35,7 @@ public class ReservationController {
 				item.setPackages(repo.getPackages(item.getReservationId()));
 				item.setMenus(repo.getMenus(item.getReservationId()));
 				item.setUser(repo.getUserById(item.getUserId()));
+				item.setPayments(repo.getPayments(item.getReservationId()));
 			}
 			DataGridResponse<Reservation> dgResponse = new DataGridResponse<Reservation>(list, request.getDraw(), list.size() > 0 ? list.get(0).getTotalRecords() : 0);
 			return HttpResponse.success(dgResponse);
@@ -55,6 +58,19 @@ public class ReservationController {
 			}
 			for (Menu item: request.getMenus()) {
 				repo.saveMenu(reservationId, item.getMenuId(), item.getQuantity());
+			}
+			if (request.getPaymentMethod().equalsIgnoreCase("Cash")) {
+				Appointment appointment = new Appointment();
+				Reservation model = repo.getById(reservationId);
+				appointment.setReferenceNo(model.getReferenceNo());
+				appointment.setUserId(request.getUserId());
+				appointment.setDate(request.getAppointmentDate());
+				repo.saveAppointment(appointment);
+			} else {
+				for (Payment item: request.getPayments()) {
+					item.setReservationId(reservationId);
+					repo.savePayment(item);
+				}
 			}
 			repo.commit();
 			return HttpResponse.success();
@@ -91,6 +107,7 @@ public class ReservationController {
 				item.setPackages(repo.getPackages(item.getReservationId()));
 				item.setMenus(repo.getMenus(item.getReservationId()));
 				item.setUser(repo.getUserById(item.getUserId()));
+				item.setPayments(repo.getPayments(item.getReservationId()));
 			}
 			return HttpResponse.success(result);
 		} catch (Exception e) {

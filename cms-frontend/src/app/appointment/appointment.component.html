@@ -12,7 +12,70 @@
             <h3 class="text-info">My Appointments</h3>
         </div>
     </div>
-    <br />
+    <div class="text-right mb-2">
+        <button class="btn btn-success" (click)="add()"><i class="fa fa-plus"></i> Add Appointment</button>
+    </div>
+    <table class="table" [appBlockUi]="isProcessing">
+        <thead>
+            <tr>
+                <th scope="col">Reference No</th>
+                <th scope="col">Date of Appointment</th>
+                <th scope="col">Time</th>
+                <th scope="col" class="large-screen-only">Created On</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="!appointments?.length">
+                <td class="text-center" colspan="4">No records found.</td>
+            </tr>
+            <tr *ngFor="let item of appointments">
+                <td>{{item.referenceNo}}</td>
+                <td>{{item.date | date: 'mediumDate'}}</td>
+                <td>{{item.time}}</td>
+                <td class="large-screen-only">{{item.createdOn | date: 'medium'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" (appBsModal)="modal = $event" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" [appBlockUi]="isProcessing">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar-check-o"></i>&nbsp;&nbsp;<strong>Set Appointment</strong></h4>
+                <button type="button" class="close" (click)="modal.close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Reference No</label>
+                        <input type="text" class="form-control" name="refNo" placeholder="Reference No" [(ngModel)]="model.referenceNo">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Appointment</label>
+                        <input type="text" class="form-control" name="date" placeholder="Date of Appointment" [ngModel]="model.date" (ngChangeDate)="model.date = $event"
+                            [appBsDatepicker]="{ disablePastAndPresentDate: false }">
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <div class="form-inline">
+                            From:&nbsp;<input type="text" class="form-control w-30" appTimeFormat [appMaxLength]="'5'" name="timeFrom" placeholder="00:00" [(ngModel)]="timeFrom">
+                            &nbsp;-&nbsp;
+                            <input type="text" class="form-control w-30" appTimeFormat [appMaxLength]="'5'" name="timeTo" placeholder="00:00" [(ngModel)]="timeTo">
+                        </div>
+                        <small id="timeHelp" class="form-text text-muted font-italic">Time must be in 24 hour format.</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="submit()">Save</button>
+                <button type="button" class="btn btn-secondary" (click)="modal.close()">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <app-footer></app-footer>

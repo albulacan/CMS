@@ -24,9 +24,11 @@ public class Reservation {
 	private BigDecimal amountPaid;
 	private String status;
 	private Timestamp createdOn;
+	private Date appointmentDate;
 	
 	private List<PackageModel> packages;
 	private List<Menu> menus;
+	private List<Payment> payments;
 	
 	private String clientName;
 	private int totalRecords;
@@ -134,6 +136,12 @@ public class Reservation {
 	public void setCreatedOn(Timestamp createdOn) {
 		this.createdOn = createdOn;
 	}
+	public Date getAppointmentDate() {
+		return appointmentDate;
+	}
+	public void setAppointmentDate(Date appointmentDate) {
+		this.appointmentDate = appointmentDate;
+	}
 	public List<PackageModel> getPackages() {
 		return packages;
 	}
@@ -145,6 +153,12 @@ public class Reservation {
 	}
 	public void setMenus(List<Menu> menus) {
 		this.menus = menus;
+	}
+	public List<Payment> getPayments() {
+		return payments;
+	}
+	public void setPayments(List<Payment> payments) {
+		this.payments = payments;
 	}
 	public int getTotalRecords() {
 		return totalRecords;
