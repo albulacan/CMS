@@ -17,6 +17,16 @@ export class MenuService {
     return this.httpClient.get(url);
   }
 
+  public getByCategory(category: string) {
+    const url = `${this.apiUrl}/get-by-category/${category}`;
+    return this.httpClient.get(url);
+  }
+
+  public getById(id: number) {
+    const url = `${this.apiUrl}/get-by-id/${id}`;
+    return this.httpClient.get(url);
+  }
+
   public save(model: Menu) {
     const url = `${this.apiUrl}/save`;
     return this.httpClient.post(url, model);

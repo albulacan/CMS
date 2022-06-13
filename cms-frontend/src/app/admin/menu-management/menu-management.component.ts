@@ -79,10 +79,10 @@ export class MenuManagementComponent implements OnInit {
       this.toastr.error('Image is required.');
       return;
     }
-    if (!this.model.price) {
-      this.toastr.error('Price is required.');
-      return;
-    }
+    // if (!this.model.price) {
+    //   this.toastr.error('Price is required.');
+    //   return;
+    // }
 
     this.setSave();
   }

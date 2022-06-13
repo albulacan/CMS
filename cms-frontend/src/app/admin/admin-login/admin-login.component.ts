@@ -24,7 +24,7 @@ export class AdminLoginComponent implements OnInit {
   }
 
   login() {
-    if (!this.model.username) {
+    if (!this.model.emailAddress) {
       this.toastr.error("Please enter username.");
       return;
     }
@@ -41,7 +41,7 @@ export class AdminLoginComponent implements OnInit {
           this.toastr.success(`Successfully signed in.`);
           this.model = httpResponse.body;
           this.model.isAuthenticated = true;
-          sessionStorage.setItem('user', JSON.stringify(this.model));
+          localStorage.setItem('user', JSON.stringify(this.model));
           this.router.navigate(['/admin-reservation']);
         } else {
           this.toastr.error(`${httpResponse.message}`);

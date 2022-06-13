@@ -27,7 +27,7 @@ export class ClientNavComponent implements OnInit {
       confirmButtonText: 'Yes'
     }).then((result) => {
       if (result.isConfirmed) {
-        sessionStorage.clear();
+        localStorage.clear();
         this.router.navigate(['/home']);
       }
     });

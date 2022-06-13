@@ -133,14 +133,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
   clientLogin() {
     this.isProcessing = true;
     let httpResponse: IHttpResponse;
-    this.userService.login(this.model)
+    this.userService.clientLogin(this.model)
       .pipe(finalize(() => {
         if (httpResponse?.success) {
           this.toastr.success(`Successfully signed in.`);
           this.close();
           this.model = httpResponse.body;
           this.model.isAuthenticated = true;
-          sessionStorage.setItem('user', JSON.stringify(this.model));
+          localStorage.setItem('user', JSON.stringify(this.model));
           if (this.model.admin) {
             this.router.navigate(['/admin-reservation']);
           } else {

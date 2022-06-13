@@ -1,3 +1,4 @@
+import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
@@ -6,7 +7,7 @@ import Swal from 'sweetalert2';
 import { BsModalService } from '../shared/directives/attribute/bs-modal.service';
 import { IHttpResponse } from '../shared/models/http-response';
 import { Menu } from '../shared/models/menu';
-import { Package } from '../shared/models/package';
+import { Optional, Package } from '../shared/models/package';
 import { Payment, Reservation } from '../shared/models/reservation';
 import { MenuService } from '../shared/services/menu.service';
 import { PackageService } from '../shared/services/package.service';
@@ -22,6 +23,7 @@ import { UtilityService, _File } from '../shared/services/utility.service';
 export class ReservationComponent implements OnInit {
 
   isProcessing = false;
+  isMenuProcessing = false;
   menus = [] as Menu[];
   packages = [] as Package[];
   model = new Reservation();
@@ -40,6 +42,8 @@ export class ReservationComponent implements OnInit {
   timeTo = '';
   toAM = 'AM';
 
+  doneMenu = 0;
+
   constructor(private packageService: PackageService,
     private menuService: MenuService,
     private toastr: ToastrService,
@@ -49,7 +53,19 @@ export class ReservationComponent implements OnInit {
     private utilService: UtilityService) { }
 
   ngOnInit(): void {
-    this.getMenus();
+    this.menus = [];
+    this.getMenuByCategory('Pork');
+    this.getMenuByCategory('Beef');
+    this.getMenuByCategory('Chicken');
+    this.getMenuByCategory('Vegetable');
+    this.getMenuByCategory('Pasta');
+    this.getMenuByCategory('Appetizer');
+    this.getMenuByCategory('Seafoods');
+    this.getMenuByCategory('Soup with Meat');
+    this.getMenuByCategory('Soup without Meat');
+    this.getMenuByCategory('Drinks');
+    this.getMenuByCategory('Dessert');
+    this.getMenuByCategory('Others');
     this.getPackages();
   }
 
@@ -78,6 +94,64 @@ export class ReservationComponent implements OnInit {
           console.log(error);
           this.isProcessing = false;
         });
+  }
+
+  getMenuByCategory(category: string) {
+    this.isMenuProcessing = true;
+    let httpResponse: IHttpResponse;
+    this.menuService.getByCategory(category)
+      .pipe(finalize(() => {
+        if (httpResponse?.success) {
+          this.doneMenu++;
+          const result = httpResponse.body as Menu[];
+          result?.forEach(x => {
+            if (x.deleted) {
+              return;
+            }
+            this.getMenuById(x.menuId);
+            this.menus.push(x);
+          });
+        } else {
+          this.toastr.error(`Unable to get menu. ${httpResponse.message}`);
+        }
+        this.isMenuProcessing = false;
+      }))
+      .subscribe((response: IHttpResponse) => httpResponse = response,
+        error => {
+          console.log(error);
+          this.isMenuProcessing = false;
+        });
+  }
+
+  getMenuById(id: number) {
+    this.isMenuProcessing = true;
+    let httpResponse: IHttpResponse;
+    this.menuService.getById(id)
+      .pipe(finalize(() => {
+        if (httpResponse?.success) {
+          const result = httpResponse.body as Menu;
+          this.menus.map(x => {
+            if (+x.menuId === +id) {
+              x.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl(result.image);
+            }
+          });
+        } else {
+          this.toastr.error(`Unable to get menu. ${httpResponse.message}`);
+        }
+        this.isMenuProcessing = false;
+      }))
+      .subscribe((response: IHttpResponse) => httpResponse = response,
+        error => {
+          console.log(error);
+          this.isMenuProcessing = false;
+        });
+  }
+
+  private setMenuProcessing() {
+    if (this.isMenuProcessing && this.doneMenu === 12) {
+      this.isMenuProcessing = false;
+      this.doneMenu = 0;
+    }
   }
 
   getMenu(): Menu[] {
@@ -141,36 +215,42 @@ export class ReservationComponent implements OnInit {
       this.toastr.error('Package already selected.');
       return;
     }
-    this.badgeCount++;
+    this.packages.find(x => +x.packageId === +item.packageId).selected = true;
     this.model.packages.push(JSON.parse(JSON.stringify(item)));
-    this.model.amountDue = +this.model.amountDue + +item.price;
     this.toastr.success('Package successfully added.');
   }
 
+  addOption(item: Package) {
+    this.model.packages.find(x => +x.packageId === +item.packageId).optionals = item.optionals;
+  }
+
+  mains = ['Pork', 'Beef', 'Chicken', 'Fish', 'Vegetable'];
+
   addMenuToCart(item: Menu) {
-    this.badgeCount = +this.badgeCount + +item.quantity;
-    if (this.model?.menus?.find(x => +x.menuId === +item.menuId)) {
-      this.model.menus.map(x => {
-        if (+x.menuId === +item.menuId) {
-          x.quantity = +x.quantity + item.quantity;
-        }
-      });
-    } else {
-      this.model.menus.push(JSON.parse(JSON.stringify(item)));
+    const mains = this.model.menus.filter(x => this.mains.includes(x.category)).length;
+    if (mains >= 4) {
+      this.toastr.error('Only 4 main courses can be added to order.');
+      return;
     }
-    this.model.amountDue = +this.model.amountDue + (+item.price * +item.quantity);
+    const _found = this.model.menus.find(x => x.category === item.category);
+    if (_found) {
+      this.toastr.error('Only 1 menu per category can be selected.');
+      return;
+    }
+    this.model.menus.push(JSON.parse(JSON.stringify(item)))
     this.toastr.success('Menu successfully added.');
   }
 
   remove(type: string, i: number) {
     if (type === 'package') {
       this.badgeCount--;
-      this.model.amountDue = +this.model.amountDue - +this.model.packages[i].price;
+      this.packages.find(x => +x.packageId === +this.model.packages[i].packageId).selected = false;
+      this.packages.find(x => +x.packageId === +this.model.packages[i].packageId).optionals.map(x => x.checked = false);
       this.model.packages.splice(i, 1);
     } else {
       const qty = this.model.menus[i].quantity;
       this.badgeCount = +this.badgeCount - +qty;
-      this.model.amountDue = +this.model.amountDue - (+this.model.menus[i].price * +this.model.menus[i].quantity);
+      // this.model.amountDue = +this.model.amountDue - (+this.model.menus[i].price * +this.model.menus[i].quantity);
       this.model.menus.splice(i, 1);
     }
   }
@@ -216,10 +296,6 @@ export class ReservationComponent implements OnInit {
     }
     if (!this.model.occasion) {
       this.toastr.error('Occasion is required.');
-      return;
-    }
-    if (!this.model.pax) {
-      this.toastr.error('No of Pax is required.');
       return;
     }
     if (!this.model.date) {
@@ -269,9 +345,29 @@ export class ReservationComponent implements OnInit {
       }
     }
 
-    if (!this.model.packages?.length && !this.model.menus?.length) {
-      this.toastr.error('Please select at least a package or menu.');
+    if (!this.model.packages?.length) {
+      this.toastr.error('Please select at least a package.');
       return;
+    }
+
+    if (!this.model.menus?.length) {
+      this.toastr.error('Please select a menu.');
+      return;
+    }
+
+    if (this.model.paymentMethod === 'Gcash') {
+      if (this.model.paymentOption === 'Down Payment') {
+        const dp = +this.model.amountDue / 2;
+        if (+this.payment.amount < dp) {
+          this.toastr.error(`Please pay at least P${dp}.00 for down payment.`);
+          return;
+        }
+      } else {
+        if (+this.payment.amount !== +this.model.amountDue) {
+          this.toastr.error('Please settle your payment in full.');
+          return;
+        }
+      }
     }
 
     Swal.fire({
@@ -286,6 +382,7 @@ export class ReservationComponent implements OnInit {
       if (result.isConfirmed) {
         this.model.time = `${this.timeFrom}${this.fromAM}-${this.timeTo}${this.toAM}`;
         if (this.model.paymentMethod === 'Gcash') {
+          this.model.amountPaid = this.payment.amount;
           this.model.payments.push(this.payment);
         }
         this.save();
@@ -300,6 +397,7 @@ export class ReservationComponent implements OnInit {
     this.model.appointmentDate = this.utilService.toJsonDate(this.model.appointmentDate);
     this.model.status = 'Pending';
     this.model.userId = this.userService.userDetails.userId;
+    this.model.amountDue = this.amountDue;
     this.reservationService.save(this.model)
       .pipe(finalize(() => {
         if (httpResponse?.success) {
@@ -315,6 +413,10 @@ export class ReservationComponent implements OnInit {
           this.timeTo = '';
           this.fromAM = 'AM';
           this.toAM = 'AM';
+          this.packages.map(x => {
+            x.selected = false;
+            x.optionals.map(y => y.checked = false);
+          });
           Swal.fire(
             'Success!',
             'Your reservation request is successfully submitted. Kindly wait for our call to confirm your reservation. Thank you!',
@@ -330,6 +432,26 @@ export class ReservationComponent implements OnInit {
           console.log(error);
           this.isProcessing = false;
         });
+  }
+
+  // getter
+
+  get amountDue() {
+    if (!this.model || !this.model.packages) {
+      return 0;
+    }
+    let amountDue = 0;
+    this.model.packages.forEach(x => {
+      amountDue = +amountDue + +x.price;
+      if (x.optionals && x.optionals.length) {
+        x.optionals.forEach(y => {
+          if (y.checked) {
+            amountDue = +amountDue + y.price;
+          }
+        });
+      }
+    });
+    return amountDue;
   }
 
 

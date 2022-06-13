@@ -44,19 +44,13 @@
             </div>
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label>No of Pax</label>
-                    <input type="number" min="0" class="form-control" name="pax" placeholder="No of Pax" [(ngModel)]="model.pax">
+                    <label>Date of Event</label>
+                    <input type="text" class="form-control" name="date" placeholder="Date of Event" [ngModel]="model.date" (ngChangeDate)="getReservationByDate($event)"
+                        [appBsDatepicker]="{ disablePastAndPresentDate: true }">
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label>Date of Event</label>
-                    <input type="text" class="form-control" name="date" placeholder="Date of Event" [ngModel]="model.date" (ngChangeDate)="getReservationByDate($event)"
-                        [appBsDatepicker]="{ disablePastAndPresentDate: false }">
-                </div>
-            </div>
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Time of Event</label>
@@ -85,8 +79,6 @@
                     </select>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Event Motif</label>
@@ -94,6 +86,8 @@
                     <small id="motifHelp" class="form-text text-muted font-italic">Color of your choice. Ex: Green</small>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Theme</label>
@@ -109,10 +103,9 @@
                         <option value="Down Payment">Down Payment</option>
                         <option value="Full Payment">Full Payment</option>
                     </select>
+                    <small id="paymentOptionHelp" class="form-text text-muted font-italic">Please pay at least 50% of your amount due for Down Payment.</small>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
                     <label>Payment Method</label>
@@ -123,11 +116,13 @@
                     </select>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-lg-4" *ngIf="model.paymentMethod === 'Cash'">
                 <div class="form-group">
                     <label>Appointment Date for Payment</label>
                     <input type="text" class="form-control" name="dateA" placeholder="Date of Appointment" [ngModel]="model.appointmentDate" (ngChangeDate)="model.appointmentDate = $event"
-                        [appBsDatepicker]="{ disablePastAndPresentDate: false }">
+                        [appBsDatepicker]="{ disablePastAndPresentDate: true }">
                 </div>
             </div>
             <div class="col-lg-4" *ngIf="model.paymentMethod === 'Gcash'">
@@ -146,9 +141,6 @@
         <div *ngIf="model.paymentMethod === 'Gcash'" class="alert alert-info font-italic" role="alert">
             For GCASH payment, kindly send your payment to our GCASH ACCOUNT: <strong>(0916) 436 4009</strong>
         </div>
-        <div class="text-right">
-            <button type="button" class="btn btn-info" [disabled]="invalidDate" (click)="submit()"><i class="fa fa-floppy-o"></i> Submit</button>
-        </div>
     </form>
 </div>
 
@@ -163,7 +155,7 @@
         <br />
         <div class="row" [appBlockUi]="isProcessing">
             <div class="col-lg-4 col-xs-1" style="margin-bottom: 25px;" *ngFor="let item of packages">
-                <app-package [item]="item"></app-package>
+                <app-package [item]="item" (ngChangeOption)="addOption($event)"></app-package>
                 <button class="btn btn-success mt-2" (click)="addPackageToCart(item)"><i class="fa fa-cart-plus"></i> Add to Order</button>
             </div>
         </div>
@@ -178,7 +170,7 @@
 <section>
     <div class="container text-center text-dark">
         <h1 class="display-5 text-info">Menus</h1>
-        <div class="row mb-2" [appBlockUi]="isProcessing">
+        <div class="row mb-2" [appBlockUi]="isMenuProcessing">
             <div class="col-lg-3">
                 <select class="form-control" name="category" [(ngModel)]="selectedCategory">
                     <option value="">Menu Category</option>
@@ -188,7 +180,7 @@
                     <option value="Fish">Fish</option>
                     <option value="Vegetable">Vegetable</option>
                     <option value="Pasta">Noodles/Pasta</option>
-                    <option value="Appetizer/Pulutan">Appetizer/Pulutan</option>
+                    <option value="Appetizer">Appetizer/Pulutan</option>
                     <option value="Seafoods">Seafoods</option>
                     <option value="Soup with Meat">Soup with Meat</option>
                     <option value="Soup without Meat">Soup without Meat</option>
@@ -199,6 +191,10 @@
             </div>
         </div>
         <app-menu [menus]="getMenu()" [showAddToCart]="true" (ngAddToCart)="addMenuToCart($event)"></app-menu>
+        <br /><br />    
+        <div class="text-right">
+            <button type="button" class="btn btn-info" [disabled]="invalidDate" (click)="submit()"><i class="fa fa-floppy-o"></i> Submit</button>
+        </div>
     </div>
 </section>
 
@@ -220,16 +216,23 @@
                     <thead>
                         <th>Package Name</th>
                         <th class="package-description">Package Description</th>
+                        <th class="package-description">Optional</th>
                         <th>Price</th>
                         <th></th>
                     </thead>
                     <tbody>
                         <tr *ngIf="!model?.packages?.length">
-                            <td colspan="4" class="text-center font-italic">No packages added</td>
+                            <td colspan="5" class="text-center font-italic">No packages added</td>
                         </tr>
                         <tr *ngFor="let item of model.packages; let i = index">
                             <td>{{item.name}}</td>
-                            <td class="package-description" [innerText]="item.description"></td>
+                            <td class="package-description" [innerText]="item.description">
+                            </td>
+                            <td class="package-description">
+                                <div *ngFor="let o of item.optionals">
+                                    <div *ngIf="o.checked" [innerText]="o.description + ' - P' + (o.price | number:'1.2-2')"></div>
+                                </div>
+                            </td>
                             <td><strong>P {{item.price | number: '1.2-2'}}</strong></td>
                             <td><button type="button" class="btn btn-danger btn-sm" (click)="remove('package', i)"><i
                                 class="fa fa-times"></i></button></td>
@@ -242,27 +245,27 @@
                     <thead>
                         <th>Name</th>
                         <th class="package-description">Menu Description</th>
-                        <th>Qty</th>
-                        <th>Price</th>
+                        <!-- <th>Qty</th> -->
+                        <!-- <th>Price</th> -->
                         <th></th>
                     </thead>
                     <tbody>
                         <tr *ngIf="!model?.menus?.length">
-                            <td colspan="5" class="text-center font-italic">No menus added</td>
+                            <td colspan="3" class="text-center font-italic">No menus added</td>
                         </tr>
                         <tr *ngFor="let item of model.menus; let i = index">
                             <td>{{item.name}}</td>
                             <td class="package-description" [innerText]="item.description"></td>
-                            <td>{{item.quantity}}</td>
-                            <td><strong>P {{item.price | number: '1.2-2'}}</strong></td>
+                            <!-- <td>{{item.quantity}}</td> -->
+                            <!-- <td><strong>P {{item.price | number: '1.2-2'}}</strong></td> -->
                             <td><button type="button" class="btn btn-danger btn-sm" (click)="remove('menu', i)"><i
                                 class="fa fa-times"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
                 <br />
-                <p><strong>Total Items: {{badgeCount}}</strong></p>
-                <p><strong>Total Amount Due: P {{model.amountDue | number: '1.2-2'}}</strong></p>
+                <!-- <p><strong>Total Items: {{badgeCount}}</strong></p> -->
+                <p><strong>Total Amount Due: P {{amountDue | number: '1.2-2'}}</strong></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="cartModal.close()">Close</button>

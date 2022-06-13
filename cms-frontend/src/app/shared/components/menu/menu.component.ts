@@ -20,10 +20,6 @@ export class MenuComponent implements OnInit {
   }
 
   addToCart(item: Menu) {
-    if (!item.quantity) {
-      this.toastr.error('Please enter quantity.');
-      return;
-    }
     this.ngAddToCart.emit(item);
   }
 

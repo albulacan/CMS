@@ -13,3 +13,15 @@
     font-size: 20px;
     color: rgb(34, 33, 33);
 }
+
+/* Chrome, Safari, Edge, Opera */
+input[name=mobile]::-webkit-outer-spin-button,
+input[name=mobile]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[name=mobile] {
+  -moz-appearance: textfield;
+}

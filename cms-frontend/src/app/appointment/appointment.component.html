@@ -57,7 +57,7 @@
                     <div class="form-group">
                         <label>Date of Appointment</label>
                         <input type="text" class="form-control" name="date" placeholder="Date of Appointment" [ngModel]="model.date" (ngChangeDate)="model.date = $event"
-                            [appBsDatepicker]="{ disablePastAndPresentDate: false }">
+                            [appBsDatepicker]="{ disablePastAndPresentDate: true }">
                     </div>
                     <div class="form-group">
                         <label>Time</label>

@@ -31,7 +31,25 @@ public class MenuRepository extends DbWorker {
 	}
 	
 	public List<Menu> getAll() throws Exception {
-		SQLResult<List<Menu>> sqlResult = SelectRecords("SELECT * FROM dbo.Menu", SQLCommandType.Text, Menu.class);
+		SQLResult<List<Menu>> sqlResult = SelectRecords("SELECT [MenuId],[Name],[Description],[Category],[Price],[Image],[FileName],[Extension],[IsDeleted] FROM dbo.Menu", SQLCommandType.Text, Menu.class);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		return sqlResult.getObject();
+	}
+	
+	public List<Menu> getByCategory(String category) throws Exception {
+		SQLResult<List<Menu>> sqlResult = SelectRecords(String.format("SELECT [MenuId],[Name],[Description],[Category],[Price],[FileName],[Extension],[IsDeleted] FROM dbo.Menu WHERE [Category] = '%s'", category), SQLCommandType.Text, Menu.class);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		return sqlResult.getObject();
+	}
+	
+	public Menu getById(long id) throws Exception {
+		SQLResult<Menu> sqlResult = SelectRecord(String.format("SELECT [MenuId],[Name],[Description],[Category],[Price],[Image],[FileName],[Extension],[IsDeleted] FROM dbo.Menu WHERE MenuId = %d", id), SQLCommandType.Text, Menu.class);
 		
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());

@@ -4,6 +4,7 @@ import java.sql.JDBCType;
 import java.util.List;
 
 import com.cms.model.DataGridRequest;
+import com.cms.model.Optional;
 import com.cms.model.PackageModel;
 import com.db.lib.DbWorker;
 import com.db.lib.models.ParameterDirection;
@@ -38,7 +39,16 @@ public class PackageRepository extends DbWorker {
 		return sqlResult.getObject();
 	}
 	
-	public void save(PackageModel request) throws Exception {
+	public List<Optional> getOptionalsByPackageId(long packageId) throws Exception {
+		SQLResult<List<Optional>> sqlResult = SelectRecords(String.format("SELECT * FROM dbo.Optionals WHERE PackageId = %d AND ReservationPackageId = 0", packageId), SQLCommandType.Text, Optional.class);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		return sqlResult.getObject();
+	}
+	
+	public long save(PackageModel request) throws Exception {
 		AddParameter("PackageId", request.getPackageId(), JDBCType.BIGINT, ParameterDirection.IN);
 		AddParameter("Name", request.getName(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		AddParameter("Description", request.getDescription(), JDBCType.NVARCHAR, ParameterDirection.IN);
@@ -47,8 +57,36 @@ public class PackageRepository extends DbWorker {
 		AddParameter("AddsOn", request.getAddsOn(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		AddParameter("Price", request.getPrice(), JDBCType.DECIMAL, ParameterDirection.IN);
 		AddParameter("IsDeleted", request.isDeleted(), JDBCType.BIT, ParameterDirection.IN);
+		AddParameter("OutPackageId", JDBCType.BIGINT, ParameterDirection.OUT);
 		
-		SQLResult<?> sqlResult = SaveRecordAutoCommit("usp_cms_SavePackage", SQLCommandType.StoredProcedure);
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit("usp_cms_SavePackage", SQLCommandType.StoredProcedure);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		
+		long packageId = 0;
+		if (outputParameters.size() > 0) {
+			packageId = (Long) outputParameters.get("OutPackageId");
+        }
+		return packageId;
+	}
+	
+	public void saveOptional(Optional request) throws Exception {
+		AddParameter("PackageId", request.getPackageId(), JDBCType.BIGINT, ParameterDirection.IN);
+		AddParameter("Description", request.getDescription(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		AddParameter("Price", request.getPrice(), JDBCType.DECIMAL, ParameterDirection.IN);
+		AddParameter("ReservationPackageId", 0, JDBCType.BIGINT, ParameterDirection.IN);
+		
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit("usp_cms_SaveOptional", SQLCommandType.StoredProcedure);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+	}
+	
+	public void deleteOptional(long packageId) throws Exception {
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit(String.format("DELETE FROM dbo.Optionals WHERE PackageId = %d AND ReservationPackageId = 0", packageId), SQLCommandType.Text);
 		
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());

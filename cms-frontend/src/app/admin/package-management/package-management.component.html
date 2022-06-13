@@ -24,7 +24,7 @@
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">No. of Pax</th>
-                    <th scope="col">Menu Choices</th>
+                    <!-- <th scope="col">Menu Choices</th> -->
                     <th scope="col">Additional Excess</th>
                     <th scope="col">Price</th>
                     <th scope="col">Action</th>
@@ -32,14 +32,14 @@
             </thead>
             <tbody>
                 <tr *ngIf="!grid?.itemsOnCurrentPage?.length">
-                    <td class="text-center" colspan="7">No records found.</td>
+                    <td class="text-center" colspan="5">No records found.</td>
                 </tr>
                 <tr *ngFor="let item of grid.itemsOnCurrentPage">
                     <td>
                         <button class="btn btn-link" (click)="view(item)">{{item.name}}</button>
                     </td>
                     <td>{{item.pax}}</td>
-                    <td>{{item.menu}}</td>
+                    <!-- <td>{{item.menu}}</td> -->
                     <td>{{item.addsOn}}</td>
                     <td>{{item.price | number:'1.2-2'}}</td>
                     <td>
@@ -98,6 +98,39 @@
                         <input type="number" min="0" class="form-control" name="price" [(ngModel)]="model.price">
                     </div>
                 </form>
+                <div class="row mt-2 mb-1">
+                    <div class="col-6">
+                        <label>Optionals</label>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button class="btn btn-success" (click)="addOptional()"><i class="fa fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="!model?.optionals?.length">
+                            <td class="text-center" colspan="3">No records found.</td>
+                        </tr>
+                        <tr *ngFor="let item of model.optionals; let i = index">
+                            <td>
+                                <input type="text" class="form-control" name="desc{{i}}" [(ngModel)]="model.optionals[i].description" placeholder="Option description">
+                            </td>
+                            <td>
+                                <input type="number" min="0" class="form-control" name="price{{i}}" [(ngModel)]="model.optionals[i].price"></td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" (click)="deleteOptional(i)"><i
+                                        class="fa fa-times"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="close()">Close</button>

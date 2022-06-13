@@ -13,6 +13,7 @@ import { ReservationService } from 'src/app/shared/services/reservation.service'
 export class SalesReportComponent implements OnInit {
 
   year = '';
+  month = '';
   sales = [] as Reservation[];
   isProcessing = false;
 
@@ -22,13 +23,13 @@ export class SalesReportComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onYearChange() {
-    if (!this.year) {
+  getReport() {
+    if (!this.year || !this.month) {
       return;
     }
     this.isProcessing = true;
       let httpResponse: IHttpResponse;
-      this.reservationService.getByYear(this.year)
+      this.reservationService.getByYearMonth(this.year, this.month)
         .pipe(finalize(() => {
           if (httpResponse?.success) {
             this.sales = httpResponse.body;

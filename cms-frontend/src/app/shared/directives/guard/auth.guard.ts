@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       let isAdmin = next?.data?.isAdmin || false;
-      if (!sessionStorage.getItem('user') || (isAdmin && !this.userService?.userDetails?.admin))  {
+      if (!localStorage.getItem('user') || (isAdmin && !this.userService?.userDetails?.admin))  {
         this.router.navigate(['/home']);
         return false;
       }

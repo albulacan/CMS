@@ -12,6 +12,11 @@ export class ReservationService {
 
   constructor(private httpClient: HttpClient) { }
 
+  public getReservationDetails(model: Reservation) {
+    const url = `${this.apiUrl}/get-reservation-details`;
+    return this.httpClient.post(url, model);
+  }
+
   public getByDate(model: Reservation) {
     const url = `${this.apiUrl}/get-by-date`;
     return this.httpClient.post(url, model);
@@ -22,8 +27,8 @@ export class ReservationService {
     return this.httpClient.get(url);
   }
 
-  public getByYear(year: string) {
-    const url = `${this.apiUrl}/get-by-year/${year}`;
+  public getByYearMonth(year: string, month: string) {
+    const url = `${this.apiUrl}/get-by-year/${year}/${month}`;
     return this.httpClient.get(url);
   }
 

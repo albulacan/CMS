@@ -32,7 +32,7 @@
             </div>
         </div>
     </form>
-    <table class="table" [appBlockUi]="grid?.isProcessing">
+    <table class="table" [appBlockUi]="grid?.isProcessing || isProcessing">
         <thead>
             <tr>
                 <th scope="col">Reference No</th>
@@ -40,14 +40,13 @@
                 <th scope="col">Date of Event</th>
                 <th scope="col">Time</th>
                 <th scope="col">Occasion</th>
-                <th scope="col">No of Pax</th>
                 <th scope="col">Created On</th>
                 <th scope="col">Status</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngIf="!grid?.itemsOnCurrentPage?.length">
-                <td class="text-center" colspan="8">No records found.</td>
+                <td class="text-center" colspan="7">No records found.</td>
             </tr>
             <tr *ngFor="let item of grid.itemsOnCurrentPage">
                 <td>
@@ -57,7 +56,6 @@
                 <td>{{item.date | date: 'mediumDate'}}</td>
                 <td>{{item.time}}</td>
                 <td>{{item.occasion}}</td>
-                <td>{{item.pax}}</td>
                 <td>{{item.createdOn | date: 'medium'}}</td>
                 <td>{{item.status}}</td>
             </tr>
@@ -118,64 +116,58 @@
                                 <div class="form-group">
                                     <label>Venue</label>
                                     <input type="text" class="form-control" name="venue" placeholder="Venue"
-                                        [(ngModel)]="model.venue" disabled>
+                                        [(ngModel)]="model.venue" [disabled]="disabled">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Occasion</label>
                                     <input type="text" class="form-control" name="occasion" [(ngModel)]="model.occasion"
-                                        disabled>
+                                        [disabled]="disabled">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label>No of Pax</label>
-                                    <input type="number" min="0" class="form-control" name="pax" placeholder="No of Pax"
-                                        [(ngModel)]="model.pax" disabled>
+                                    <label>Date of Event</label>
+                                    <input type="text" class="form-control" name="date" placeholder="Date of Event"
+                                        [ngModel]="model.date" (ngModelChange)="model.date = $event" [appBsDatepicker]="{ disablePastAndPresentDate: true }"
+                                        [disabled]="disabled">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label>Date of Event</label>
-                                    <input type="text" class="form-control" name="date" placeholder="Date of Event"
-                                        [ngModel]="model.date" [appBsDatepicker]="{ disablePastAndPresentDate: true }"
-                                        disabled>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="form-group">
                                     <label>Time of Event</label>
-                                    <input type="text" class="form-control" name="time" [value]="model.time" disabled>
+                                    <input type="text" class="form-control" name="time" [(ngModel)]="model.time"
+                                        [disabled]="disabled">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Table Service</label>
                                     <select class="form-control" name="tableservice" [(ngModel)]="model.tableService"
-                                        disabled>
+                                        [disabled]="disabled">
                                         <option value="">Select Table Service</option>
                                         <option value="Buffet">Buffet</option>
                                         <option value="Plated">Plated</option>
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Event Motif</label>
                                     <input type="text" class="form-control" name="motif" placeholder="Motif"
-                                        [(ngModel)]="model.motif" disabled>
+                                        [(ngModel)]="model.motif" [disabled]="disabled">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Theme</label>
                                     <input type="text" class="form-control" name="theme" placeholder="Theme"
-                                        [(ngModel)]="model.theme" disabled>
+                                        [(ngModel)]="model.theme" [disabled]="disabled">
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -189,8 +181,6 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Payment Method</label>
@@ -198,6 +188,8 @@
                                         [(ngModel)]="model.paymentMethod" disabled>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-4" *ngIf="model.paymentMethod === 'Cash'">
                                 <div class="form-group">
                                     <label>Appointment Date for Payment</label>
@@ -217,7 +209,7 @@
                                     <label>Proof of Payment</label>
                                     <div class="form-control">
                                         <button class="btn btn-link"
-                                            (click)="download(model.payments[0])">Download</button>
+                                            (click)="viewPoP(model.payments[0])">View</button>
                                     </div>
                                 </div>
                             </div>
@@ -225,48 +217,73 @@
                     </fieldset>
                 </form>
                 <br />
-                <h4 class="text-info">Packages</h4>
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <h4 class="text-info">Packages</h4>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button type="button" class="btn btn-success" [disabled]="disabled" (click)="packageModal.open()"><i class="fa fa-plus"></i> Add Package</button>
+                    </div>
+                </div>
                 <table class="table table-striped">
                     <thead>
                         <th>Package Name</th>
                         <th class="package-description">Package Description</th>
+                        <th class="package-description">Optional</th>
                         <th>Price</th>
+                        <th></th>
                     </thead>
                     <tbody>
                         <tr *ngIf="!model?.packages?.length">
-                            <td colspan="4" class="text-center font-italic">No packages added</td>
+                            <td colspan="5" class="text-center font-italic">No packages added</td>
                         </tr>
                         <tr *ngFor="let item of model.packages; let i = index">
                             <td>{{item.name}}</td>
                             <td class="package-description" [innerText]="item.description"></td>
+                            <td class="package-description">
+                                <div *ngFor="let o of item.optionals">
+                                    <div *ngIf="o.checked" [innerText]="o.description + ' - P' + (o.price | number:'1.2-2')"></div>
+                                </div>
+                            </td>
                             <td><strong>P {{item.price | number: '1.2-2'}}</strong></td>
+                            <td><button type="button" class="btn btn-danger btn-sm" (click)="remove('package', i)" [disabled]="disabled"><i
+                                class="fa fa-times"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
                 <br />
-                <h4 class="text-info">Menus</h4>
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <h4 class="text-info">Menus</h4>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button type="button" class="btn btn-success" [disabled]="disabled" (click)="menuModal.open()"><i class="fa fa-plus"></i> Add Menu</button>
+                    </div>
+                </div>
                 <table class="table table-striped">
                     <thead>
                         <th>Name</th>
                         <th class="package-description">Menu Description</th>
-                        <th>Qty</th>
-                        <th>Price</th>
+                        <!-- <th>Qty</th> -->
+                        <!-- <th>Price</th> -->
+                        <th></th>
                     </thead>
                     <tbody>
                         <tr *ngIf="!model?.menus?.length">
-                            <td colspan="5" class="text-center font-italic">No menus added</td>
+                            <td colspan="3" class="text-center font-italic">No menus added</td>
                         </tr>
                         <tr *ngFor="let item of model.menus; let i = index">
                             <td>{{item.name}}</td>
                             <td class="package-description" [innerText]="item.description"></td>
-                            <td>{{item.quantity}}</td>
-                            <td><strong>P {{item.price | number: '1.2-2'}}</strong></td>
+                            <!-- <td>{{item.quantity}}</td> -->
+                            <!-- <td><strong>P {{item.price | number: '1.2-2'}}</strong></td> -->
+                            <td><button type="button" class="btn btn-danger btn-sm" (click)="remove('menu', i)" [disabled]="disabled"><i
+                                class="fa fa-times"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
                 <br />
-                <p><strong>Total Items: {{totalItem}}</strong></p>
-                <p><strong>Total Amount Due: P {{model.amountDue | number: '1.2-2'}}</strong></p>
+                <p><strong>Total Amount Due: P {{amountDue | number: '1.2-2'}}</strong></p>
                 <p><strong>Total Amount Paid: P {{model.amountPaid | number: '1.2-2'}}</strong></p>
                 <br />
                 <form>
@@ -275,8 +292,9 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Amount Paid</label>
-                                    <input type="number" min="0" class="form-control" name="amp" placeholder="Amount Paid"
-                                        [(ngModel)]="amountPaid" (change)="calculateAmountPaid()">
+                                    <input type="number" min="0" class="form-control" name="amp"
+                                        placeholder="Amount Paid" [(ngModel)]="amountPaid"
+                                        (change)="calculateAmountPaid()">
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -301,6 +319,92 @@
                     [disabled]="origStatus === 'Cancelled' || origStatus === 'Completed'"
                     (click)="update()">Save</button>
                 <button type="button" class="btn btn-secondary" (click)="detailModal.close()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" (appBsModal)="packageModal = $event" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document" [appBlockUi]="isProcessing">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><strong>Add Package</strong></h4>
+                <button type="button" class="close" (click)="packageModal.close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row text-center" [appBlockUi]="isProcessing">
+                    <div class="col-lg-4 col-xs-1" style="margin-bottom: 25px;" *ngFor="let item of packages">
+                        <app-package [item]="item" (ngChangeOption)="addOption($event)"></app-package>
+                        <button class="btn btn-success mt-2" (click)="addPackageToCart(item)"><i class="fa fa-cart-plus"></i> Add to Order</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="packageModal.close()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" (appBsModal)="menuModal = $event" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document" [appBlockUi]="isProcessing">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><strong>Add Menu</strong></h4>
+                <button type="button" class="close" (click)="menuModal.close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2" [appBlockUi]="isProcessing">
+                    <div class="col-lg-3">
+                        <select class="form-control" name="category" [(ngModel)]="selectedCategory">
+                            <option value="">Menu Category</option>
+                            <option value="Pork">Pork</option>
+                            <option value="Beef">Beef</option>
+                            <option value="Chicken">Chicken</option>
+                            <option value="Fish">Fish</option>
+                            <option value="Vegetable">Vegetable</option>
+                            <option value="Pasta">Noodles/Pasta</option>
+                            <option value="Appetizer">Appetizer/Pulutan</option>
+                            <option value="Seafoods">Seafoods</option>
+                            <option value="Soup with Meat">Soup with Meat</option>
+                            <option value="Soup without Meat">Soup without Meat</option>
+                            <option value="Drinks">Drinks</option>
+                            <option value="Dessert">Dessert</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <app-menu [menus]="getMenu()" [showAddToCart]="true" (ngAddToCart)="addMenuToCart($event)"></app-menu>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="menuModal.close()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" (appBsModal)="imageModal = $event" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel"><strong>Proof of Payment</strong></h4>
+                <button type="button" class="close" (click)="imageModal.close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img class="w-100" [src]="payment.imagePath">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="imageModal.close()">Close</button>
             </div>
         </div>
     </div>

@@ -32,27 +32,32 @@
                 <thead>
                     <th>Type</th>
                     <th>Description</th>
-                    <th>Quantity</th>
                     <th>Unit Price</th>
                     <th>Total</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of model.packages">
-                        <td>Package</td>
-                        <td>{{item.name}}</td>
-                        <td>1</td>
-                        <td>{{item.price | number: '1.2-2'}}</td>
-                        <td>{{item.price | number: '1.2-2'}}</td>
-                    </tr>
+                    <ng-container *ngFor="let item of model.packages; let i = index">
+                        <tr>
+                            <td>Package</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.price | number: '1.2-2'}}</td>
+                            <td>{{item.price | number: '1.2-2'}}</td>
+                        </tr>
+                        <tr *ngFor="let item of model.packages[i]?.optionals">
+                            <td>Optional</td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.price | number: '1.2-2'}}</td>
+                            <td>{{item.price | number: '1.2-2'}}</td>
+                        </tr>
+                    </ng-container>
                     <tr *ngFor="let item of model.menus">
                         <td>Menu</td>
                         <td>{{item.name}}</td>
-                        <td>{{item.quantity}}</td>
-                        <td>{{item.price | number: '1.2-2'}}</td>
-                        <td>{{(+item.price * +item.quantity) | number: '1.2-2'}}</td>
+                        <td>-</td>
+                        <td>-</td>
                     </tr>
                     <tr>
-                        <td colspan="4"><strong>Amount Due</strong></td>
+                        <td colspan="3"><strong>Amount Due</strong></td>
                         <td><strong>P {{model.amountDue | number: '1.2-2'}}</strong></td>
                     </tr>
                 </tbody>

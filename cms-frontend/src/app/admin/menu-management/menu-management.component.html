@@ -25,7 +25,7 @@
                             <option value="Fish">Fish</option>
                             <option value="Vegetable">Vegetable</option>
                             <option value="Pasta">Noodles/Pasta</option>
-                            <option value="Appetizer/Pulutan">Appetizer/Pulutan</option>
+                            <option value="Appetizer">Appetizer/Pulutan</option>
                             <option value="Seafoods">Seafoods</option>
                             <option value="Soup with Meat">Soup with Meat</option>
                             <option value="Soup without Meat">Soup without Meat</option>
@@ -50,13 +50,13 @@
                     <th scope="col">Description</th>
                     <th scope="col">Category</th>
                     <th scope="col">Image</th>
-                    <th scope="col">Price</th>
+                    <!-- <th scope="col">Price</th> -->
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngIf="!grid?.itemsOnCurrentPage?.length">
-                    <td class="text-center" colspan="6">No records found.</td>
+                    <td class="text-center" colspan="5">No records found.</td>
                 </tr>
                 <tr *ngFor="let item of grid.itemsOnCurrentPage">
                     <td>
@@ -65,7 +65,7 @@
                     <td>{{item.description}}</td>
                     <td>{{item.category}}</td>
                     <td><img style="width: 100px;" [src]="getImage(item)"></td>
-                    <td>{{item.price | number:'1.2-2'}}</td>
+                    <!-- <td>{{item.price | number:'1.2-2'}}</td> -->
                     <td>
                         <button type="button" class="btn btn-danger btn-sm" (click)="delete(item)"><i
                                 class="fa fa-times"></i></button>
@@ -117,7 +117,7 @@
                             <option value="Fish">Fish</option>
                             <option value="Vegetable">Vegetable</option>
                             <option value="Pasta">Noodles/Pasta</option>
-                            <option value="Appetizer/Pulutan">Appetizer/Pulutan</option>
+                            <option value="Appetizer">Appetizer/Pulutan</option>
                             <option value="Seafoods">Seafoods</option>
                             <option value="Soup with Meat">Soup with Meat</option>
                             <option value="Soup without Meat">Soup without Meat</option>
@@ -130,10 +130,10 @@
                         <label>Image</label>
                         <input type="file" class="form-control" name="img" (change)="onImageChange($event)">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Price</label>
                         <input type="number" min="0" class="form-control" name="price" [(ngModel)]="model.price">
-                    </div>
+                    </div> -->
                 </form>
             </div>
             <div class="modal-footer">

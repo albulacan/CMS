@@ -13,14 +13,14 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   get userDetails() {
-    if (!sessionStorage.getItem('user')) {
+    if (!localStorage.getItem('user')) {
       return new UserModel();
     }
-    return JSON.parse(sessionStorage.getItem('user')) as UserModel;
+    return JSON.parse(localStorage.getItem('user')) as UserModel;
   }
 
   get hasSession() {
-    return sessionStorage.getItem('user');
+    return localStorage.getItem('user');
   }
 
   public login(model: UserModel) {

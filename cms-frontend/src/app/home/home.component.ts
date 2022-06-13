@@ -41,8 +41,46 @@ export class HomeComponent implements OnInit {
         }
       }
     );
-    this.getMenus();
-    this.getPackages();
+    this.menus = [];
+    // this.getMenuByCategory('Pork');
+    // this.getMenuByCategory('Beef');
+    // this.getMenuByCategory('Chicken');
+    // this.getMenuByCategory('Vegetable');
+    // this.getMenuByCategory('Pasta');
+    // this.getMenuByCategory('Appetizer');
+    // this.getMenuByCategory('Seafoods');
+    // this.getMenuByCategory('Soup with Meat');
+    // this.getMenuByCategory('Soup without Meat');
+    // this.getMenuByCategory('Drinks');
+    // this.getMenuByCategory('Dessert');
+    // this.getMenuByCategory('Others');
+    // this.getPackages();
+  }
+
+  getMenuByCategory(category: string) {
+    this.isMenuProcessing = true;
+    let httpResponse: IHttpResponse;
+    this.menuService.getByCategory(category)
+      .pipe(finalize(() => {
+        if (httpResponse?.success) {
+          const result = httpResponse.body as Menu[];
+          result?.forEach(x => {
+            if (x.deleted) {
+              return;
+            }
+            x.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl(x.image);
+            this.menus.push(x);
+          });
+        } else {
+          this.toastr.error(`Unable to get menu. ${httpResponse.message}`);
+        }
+        this.isMenuProcessing = false;
+      }))
+      .subscribe((response: IHttpResponse) => httpResponse = response,
+        error => {
+          console.log(error);
+          this.isMenuProcessing = false;
+        });
   }
 
   getMenus() {
@@ -127,7 +165,7 @@ export class HomeComponent implements OnInit {
   }
 
   administrator() {
-    sessionStorage.clear();
+    localStorage.clear();
     this.router.navigate(['/admin-login']);
   }
 

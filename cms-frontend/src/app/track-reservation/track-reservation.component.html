@@ -20,14 +20,13 @@
                 <th scope="col" class="large-screen-only">Date of Event</th>
                 <th scope="col" class="large-screen-only">Time</th>
                 <th scope="col" class="large-screen-only">Occasion</th>
-                <th scope="col" class="large-screen-only">No of Pax</th>
                 <th>Created On</th>
                 <th scope="col">Status</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngIf="!reservations?.length">
-                <td class="text-center" colspan="7">No records found.</td>
+                <td class="text-center" colspan="6">No records found.</td>
             </tr>
             <tr *ngFor="let item of reservations">
                 <td>
@@ -36,7 +35,6 @@
                 <td class="large-screen-only">{{item.date | date: 'mediumDate'}}</td>
                 <td class="large-screen-only">{{item.time}}</td>
                 <td class="large-screen-only">{{item.occasion}}</td>
-                <td class="large-screen-only">{{item.pax}}</td>
                 <td>{{item.createdOn | date: 'medium'}}</td>
                 <td>{{item.status}}</td>
             </tr>
@@ -90,13 +88,6 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group">
-                                    <label>No of Pax</label>
-                                    <input type="number" min="0" class="form-control" name="pax" placeholder="No of Pax"
-                                        [(ngModel)]="model.pax" disabled>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
                                     <label>Date of Event</label>
                                     <input type="text" class="form-control" name="date" placeholder="Date of Event"
                                         [(ngModel)]="model.date" disabled>
@@ -118,8 +109,6 @@
                                         [(ngModel)]="model.tableService" disabled>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Event Motif</label>
@@ -129,6 +118,8 @@
                                         Ex: Green</small>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Theme</label>
@@ -152,8 +143,6 @@
                                         [(ngModel)]="model.paymentMethod" disabled>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-3" *ngIf="model.paymentMethod === 'Cash'">
                                 <div class="form-group">
                                     <label>Appointment Date for Payment</label>
@@ -161,6 +150,8 @@
                                         [value]="model.appointmentDate | date:'mediumDate'" disabled>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-3" *ngIf="model.paymentMethod === 'Gcash'">
                                 <div class="form-group">
                                     <label>Payment Amount</label>
@@ -186,15 +177,20 @@
                     <thead>
                         <th>Package Name</th>
                         <th>Package Description</th>
+                        <th>Optional</th>
                         <th>Price</th>
                     </thead>
                     <tbody>
                         <tr *ngIf="!model?.packages?.length">
-                            <td colspan="3" class="text-center font-italic">No packages added</td>
+                            <td colspan="4" class="text-center font-italic">No packages added</td>
                         </tr>
                         <tr *ngFor="let item of model.packages; let i = index">
                             <td>{{item.name}}</td>
                             <td [innerText]="item.description"></td>
+                            <td>
+                                <div *ngFor="let o of item.optionals" [innerText]="o.description + ' - P' + (o.price | number:'1.2-2')">
+                                </div>
+                            </td>
                             <td><strong>P {{item.price | number: '1.2-2'}}</strong></td>
                         </tr>
                     </tbody>
@@ -205,23 +201,23 @@
                     <thead>
                         <th>Name</th>
                         <th class="large-screen-only">Menu Description</th>
-                        <th>Qty</th>
-                        <th>Price</th>
+                        <!-- <th>Qty</th> -->
+                        <!-- <th>Price</th> -->
                     </thead>
                     <tbody>
                         <tr *ngIf="!model?.menus?.length">
-                            <td colspan="4" class="text-center font-italic">No menus added</td>
+                            <td colspan="2" class="text-center font-italic">No menus added</td>
                         </tr>
                         <tr *ngFor="let item of model.menus; let i = index">
                             <td>{{item.name}}</td>
                             <td class="large-screen-only" [innerText]="item.description"></td>
-                            <td>{{item.quantity}}</td>
-                            <td><strong>P {{item.price | number: '1.2-2'}}</strong></td>
+                            <!-- <td>{{item.quantity}}</td> -->
+                            <!-- <td><strong>P {{item.price | number: '1.2-2'}}</strong></td> -->
                         </tr>
                     </tbody>
                 </table>
                 <br />
-                <p><strong>Total Items: {{totalItems}}</strong></p>
+                <!-- <p><strong>Total Items: {{totalItems}}</strong></p> -->
                 <p><strong>Total Amount Due: P {{model.amountDue | number: '1.2-2'}}</strong></p>
                 <p><strong>Total Amount Paid: P {{model.amountPaid | number: '1.2-2'}}</strong></p>
             </div>

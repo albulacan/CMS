@@ -68,3 +68,7 @@ body {
         display: none;
     }
 }
+
+.modal {
+    overflow: auto !important;
+}

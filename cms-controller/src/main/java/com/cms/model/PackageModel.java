@@ -1,9 +1,11 @@
 package com.cms.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class PackageModel {
 
+	private long reservationPackageId;
 	private long packageId;
 	private String name;
 	private String description;
@@ -12,9 +14,16 @@ public class PackageModel {
 	private String addsOn;
 	private BigDecimal price;
 	private boolean isDeleted;
+	private List<Optional> optionals;
 	
 	private int totalRecords;
 	
+	public long getReservationPackageId() {
+		return reservationPackageId;
+	}
+	public void setReservationPackageId(long reservationPackageId) {
+		this.reservationPackageId = reservationPackageId;
+	}
 	public long getPackageId() {
 		return packageId;
 	}
@@ -68,6 +77,12 @@ public class PackageModel {
 	}
 	public void setTotalRecords(int totalRecords) {
 		this.totalRecords = totalRecords;
+	}
+	public List<Optional> getOptionals() {
+		return optionals;
+	}
+	public void setOptionals(List<Optional> optionals) {
+		this.optionals = optionals;
 	}
 
 }

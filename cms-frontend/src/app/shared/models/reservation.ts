@@ -1,3 +1,4 @@
+import { SafeResourceUrl } from "@angular/platform-browser";
 import { Menu } from "./menu";
 import { Package } from "./package";
 import { UserModel } from "./user";
@@ -38,6 +39,7 @@ export class Payment {
         public amount: number = 0,
         public fileName: string = '',
         public attachment: string = '',
-        public createdOn: string = '') {
+        public createdOn: string = '',
+        public imagePath: SafeResourceUrl = '',) {
     }
 }

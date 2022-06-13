@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cms.model.DataGridRequest;
 import com.cms.model.DataGridResponse;
 import com.cms.model.HttpResponse;
+import com.cms.model.Optional;
 import com.cms.model.PackageModel;
 import com.cms.repository.PackageRepository;
 
@@ -27,6 +28,9 @@ public class PackageController {
 			repo = new PackageRepository();
 			List<PackageModel> list = repo.getDataGrid(request);
 			DataGridResponse<PackageModel> dgResponse = new DataGridResponse<PackageModel>(list, request.getDraw(), list.size() > 0 ? list.get(0).getTotalRecords() : 0);
+			for (PackageModel item: dgResponse.getData()) {
+				item.setOptionals(repo.getOptionalsByPackageId(item.getPackageId()));
+			}
 			return HttpResponse.success(dgResponse);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -41,7 +45,11 @@ public class PackageController {
 		PackageRepository repo = null;
 		try {
 			repo = new PackageRepository();
-			return HttpResponse.success(repo.getAll());
+			List<PackageModel> data = repo.getAll();
+			for (PackageModel item: data) {
+				item.setOptionals(repo.getOptionalsByPackageId(item.getPackageId()));
+			}
+			return HttpResponse.success(data);
 		} catch (Exception e) {
 			System.out.println(e);
 			return HttpResponse.failed(e.getMessage());
@@ -55,7 +63,13 @@ public class PackageController {
 		PackageRepository repo = null;
 		try {
 			repo = new PackageRepository();
-			repo.save(request);
+			long packageId = repo.save(request);
+			repo.deleteOptional(packageId);
+			for (Optional item: request.getOptionals()) {
+				item.setPackageId(packageId);
+				repo.saveOptional(item);
+			}
+			repo.commit();
 			return HttpResponse.success();
 		} catch (Exception e) {
 			System.out.println(e);

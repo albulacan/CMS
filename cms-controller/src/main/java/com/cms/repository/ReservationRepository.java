@@ -7,6 +7,7 @@ import java.util.List;
 import com.cms.model.Appointment;
 import com.cms.model.DataGridRequest;
 import com.cms.model.Menu;
+import com.cms.model.Optional;
 import com.cms.model.PackageModel;
 import com.cms.model.Payment;
 import com.cms.model.Reservation;
@@ -37,15 +38,15 @@ public class ReservationRepository extends DbWorker {
 	}
 	
 	public List<Reservation> getAllByUserId(long userId) throws Exception {
-		SQLResult<List<Reservation>> sqlResult = SelectRecords(String.format("SELECT * FROM dbo.Reservation WHERE UserId = %d", userId), SQLCommandType.Text, Reservation.class);
+		SQLResult<List<Reservation>> sqlResult = SelectRecords(String.format("SELECT * FROM dbo.Reservation WHERE UserId = %d ORDER BY ReservationId DESC", userId), SQLCommandType.Text, Reservation.class);
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());
 		}
 		return sqlResult.getObject();
 	}
 	
-	public List<Reservation> getAllByYear(String year) throws Exception {
-		SQLResult<List<Reservation>> sqlResult = SelectRecords(String.format("SELECT MAX(CreatedOn) CreatedOn, SUM(AmountDue) AmountDue FROM dbo.Reservation WHERE DATEPART(YEAR, CreatedOn) = '%s' GROUP BY DATEADD(MONTH, DATEDIFF(MONTH, 0, CreatedOn), 0)", year), SQLCommandType.Text, Reservation.class);
+	public List<Reservation> getAllByYearMonth(String year, String month) throws Exception {
+		SQLResult<List<Reservation>> sqlResult = SelectRecords(String.format("SELECT * FROM dbo.Reservation WHERE DATEPART(YEAR, CreatedOn) = '%s' AND DATEPART(MONTH, CreatedOn) = '%s'", year, month), SQLCommandType.Text, Reservation.class);
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());
 		}
@@ -129,6 +130,7 @@ public class ReservationRepository extends DbWorker {
 		AddParameter("AmountPaid", request.getAmountPaid(), JDBCType.DECIMAL, ParameterDirection.IN);
 		AddParameter("Status", request.getStatus(), JDBCType.NVARCHAR, ParameterDirection.IN);
 		AddParameter("ReservationId", JDBCType.BIGINT, ParameterDirection.OUT);
+		AddParameter("InReservationId", request.getReservationId(), JDBCType.BIGINT, ParameterDirection.IN);
 		
 		SQLResult<?> sqlResult = SaveRecordWithoutCommit("usp_cms_SaveReservation", SQLCommandType.StoredProcedure);
 		
@@ -142,13 +144,20 @@ public class ReservationRepository extends DbWorker {
 		return reservationId;
 	}
 	
-	public void savePackage(long reservationId, long packageId) throws Exception {
-		SQLResult<?> sqlResult = SaveRecordWithoutCommit(String.format("INSERT INTO [dbo].[ReservationPackage] ([ReservationId] ,[PackageId]) VALUES (%d,%d)",
-				reservationId, packageId), SQLCommandType.Text);
+	public long savePackage(long reservationId, long packageId) throws Exception {
+		AddParameter("ReservationId", reservationId, JDBCType.BIGINT, ParameterDirection.IN);
+		AddParameter("PackageId", packageId, JDBCType.BIGINT, ParameterDirection.IN);
+		AddParameter("ReservationPackageId", JDBCType.BIGINT, ParameterDirection.OUT);
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit("usp_cms_SaveReservationPackage", SQLCommandType.StoredProcedure);
 		
 		if (!sqlResult.isSuccess()) {
 			throw new Exception(sqlResult.getMessage());
 		}
+		long reservationPackageId = 0;
+		if (outputParameters.size() > 0) {
+			reservationPackageId = (Long) outputParameters.get("ReservationPackageId");
+        }
+		return reservationPackageId;
 	}
 	
 	public void saveMenu(long reservationId, long menuId, int quantity) throws Exception {
@@ -161,7 +170,7 @@ public class ReservationRepository extends DbWorker {
 	}
 	
 	public void updateReservation(Reservation model) throws Exception {
-		SQLResult<?> sqlResult = SaveRecordAutoCommit(String.format("UPDATE [dbo].[Reservation] SET AmountPaid = %f, Status = '%s' WHERE ReservationId = %d",
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit(String.format("UPDATE [dbo].[Reservation] SET AmountPaid = %f, Status = '%s' WHERE ReservationId = %d",
 				model.getAmountPaid(), model.getStatus(), model.getReservationId()), SQLCommandType.Text);
 		
 		if (!sqlResult.isSuccess()) {
@@ -201,6 +210,52 @@ public class ReservationRepository extends DbWorker {
 			throw new Exception(sqlResult.getMessage());
 		}
 		return sqlResult.getObject();
+	}
+	
+	public void deletePackage(long reservationId) throws Exception {
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit(String.format("DELETE FROM [dbo].[ReservationPackage] WHERE ReservationId = %d", reservationId), SQLCommandType.Text);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+	}
+	
+	public void deleteMenu(long reservationId) throws Exception {
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit(String.format("DELETE FROM [dbo].[ReservationMenu] WHERE ReservationId = %d", reservationId), SQLCommandType.Text);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+	}
+	
+	public List<Optional> getOptionalsByPackageId(long reservationPackageId) throws Exception {
+		SQLResult<List<Optional>> sqlResult = SelectRecords(String.format("SELECT * FROM dbo.Optionals WHERE ReservationPackageId = %d", reservationPackageId), SQLCommandType.Text, Optional.class);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+		return sqlResult.getObject();
+	}
+	
+	public void saveOptional(Optional request) throws Exception {
+		AddParameter("PackageId", request.getPackageId(), JDBCType.BIGINT, ParameterDirection.IN);
+		AddParameter("Description", request.getDescription(), JDBCType.NVARCHAR, ParameterDirection.IN);
+		AddParameter("Price", request.getPrice(), JDBCType.DECIMAL, ParameterDirection.IN);
+		AddParameter("ReservationPackageId", request.getReservationPackageId(), JDBCType.BIGINT, ParameterDirection.IN);
+		
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit("usp_cms_SaveOptional", SQLCommandType.StoredProcedure);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
+	}
+	
+	public void deleteOptional(long reservationPackageId) throws Exception {
+		SQLResult<?> sqlResult = SaveRecordWithoutCommit(String.format("DELETE FROM dbo.Optionals WHERE ReservationPackageId = %d", reservationPackageId), SQLCommandType.Text);
+		
+		if (!sqlResult.isSuccess()) {
+			throw new Exception(sqlResult.getMessage());
+		}
 	}
 
 }

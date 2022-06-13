@@ -5,7 +5,7 @@ import { BsModalService } from 'src/app/shared/directives/attribute/bs-modal.ser
 import { DataGridServerService } from 'src/app/shared/directives/attribute/data-grid-server.service';
 import { DataGridFactory } from 'src/app/shared/directives/attribute/data-grid.factory';
 import { IHttpResponse } from 'src/app/shared/models/http-response';
-import { Package } from 'src/app/shared/models/package';
+import { Optional, Package } from 'src/app/shared/models/package';
 import { PackageService } from 'src/app/shared/services/package.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
@@ -46,6 +46,26 @@ export class PackageManagementComponent implements OnInit {
     this.modal.close();
   }
 
+  addOptional() {
+    this.model.optionals.push(new Optional());
+  }
+
+  deleteOptional(i: number) {
+    Swal.fire({
+      title: 'Delete Optional',
+      text: "Are you sure you want to delete this option?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.model.optionals.splice(i, 1);
+      }
+    });
+  }
+
   save() {
     if (!this.model.name) {
       this.toastr.error('Name is required.');
@@ -61,6 +81,24 @@ export class PackageManagementComponent implements OnInit {
     }
     if (!this.model.price) {
       this.toastr.error('Price is required.');
+      return;
+    }
+    let hasError = false;
+    if (this.model.optionals.length) {
+      let i = 1;
+      this.model.optionals.forEach(x => {
+        if (!x.description) {
+          this.toastr.error(`Option description in row ${i} is required.`);
+          hasError = true;
+        }
+        if (!+x.price) {
+          this.toastr.error(`Option price in row ${i} is required.`);
+          hasError = true;
+        }
+        i++;
+      });
+    }
+    if (hasError) {
       return;
     }
 

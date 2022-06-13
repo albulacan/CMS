@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Package } from '../../models/package';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Optional, Package } from '../../models/package';
 
 @Component({
   selector: 'app-package',
@@ -9,10 +9,15 @@ import { Package } from '../../models/package';
 export class PackageComponent implements OnInit {
 
   @Input() item: Package;
+  @Output() ngChangeOption = new EventEmitter<Package>();
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onChangeOption() {
+    this.ngChangeOption.emit(this.item);
   }
 
 }

@@ -4,20 +4,21 @@
     </div>
     <div class="col-lg-4 col-xs-1 text-left" *ngFor="let item of menus" style="margin-bottom: 25px;">
         <div class="card">
-            <img [src]="item.imagePath" class="card-img-top" alt="menu1">
+            <img *ngIf="item.imagePath" [src]="item.imagePath" class="card-img-top" alt="menu1">
+            <div *ngIf="!item.imagePath" class="card-img-top text-center p-5">
+                <img src="assets/images/ajax-loader.gif" width="40" height="40" /> <span>Just a moment...</span>
+            </div>
             <div class="card-body">
                 <h5 class="card-title text-info">{{item.name}}</h5>
-                <p class="card-text p-0 m-0"><strong>P {{item.price | number: '1.2-2'}}</strong></p>
-                <p class="card-text p-0 m-0">{{item.description}}</p>
             </div>
         </div>
         <div *ngIf="showAddToCart" class="mt-2 pl-3 pr-3">
             <div class="row">
-                <div class="col-6">
+                <!-- <div class="col-3">
                     <input type="number" min="0" class="form-control" name="quantity" placeholder="Quantity" min="0" [(ngModel)]="item.quantity">
-                </div>
-                <div class="col-6">
-                    <button class="btn btn-success w-100" (click)="addToCart(item)"><i class="fa fa-cart-plus"></i> Add to Order</button>
+                </div> -->
+                <div class="col-12 text-center">
+                    <button class="btn btn-success" (click)="addToCart(item)"><i class="fa fa-cart-plus"></i> Add to Order</button>
                 </div>
             </div>
         </div>
