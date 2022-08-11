@@ -44,6 +44,8 @@ export class ReservationComponent implements OnInit {
 
   doneMenu = 0;
 
+  showAppointment = true;
+
   constructor(private packageService: PackageService,
     private menuService: MenuService,
     private toastr: ToastrService,
@@ -262,6 +264,7 @@ export class ReservationComponent implements OnInit {
     if (this.prevDate === date) {
       return;
     }
+    this.showAppointment = false;
     this.isProcessing = true;
     const request = new Reservation();
     request.date = this.utilService.toJsonDate(date);
@@ -281,11 +284,13 @@ export class ReservationComponent implements OnInit {
         }
         this.prevDate = date;
         this.isProcessing = false;
+        this.showAppointment = true;
       }))
       .subscribe((response: IHttpResponse) => httpResponse = response,
         error => {
           console.log(error);
           this.isProcessing = false;
+          this.showAppointment = true;
         });
   }
 
@@ -357,7 +362,7 @@ export class ReservationComponent implements OnInit {
 
     if (this.model.paymentMethod === 'Gcash') {
       if (this.model.paymentOption === 'Down Payment') {
-        const dp = +this.model.amountDue / 2;
+        const dp = 5000;
         if (+this.payment.amount < dp) {
           this.toastr.error(`Please pay at least P${dp}.00 for down payment.`);
           return;
@@ -452,6 +457,15 @@ export class ReservationComponent implements OnInit {
       }
     });
     return amountDue;
+  }
+
+  get appointmentEndDate() {
+    if (!this.model.date) {
+      return '';
+    }
+    const d = new Date(this.model.date);
+    d.setDate(d.getDate() - 1);
+    return d;
   }
 
 

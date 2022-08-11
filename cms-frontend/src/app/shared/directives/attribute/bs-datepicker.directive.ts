@@ -33,7 +33,7 @@ export class BsDatepickerDirective implements OnInit {
     $(this.el.nativeElement).datepicker({
       autoclose: this.appBsDatepicker.autoclose === undefined || this.appBsDatepicker.autoclose,
       todayHighlight: this.appBsDatepicker.todayHighlight === undefined || this.appBsDatepicker.todayHighlight,
-      endDate: this.appBsDatepicker.disableFutureDates ? '-0d' : '',
+      endDate: this.appBsDatepicker.disableFutureDates ? '-0d' : (this.appBsDatepicker.endDate || ''),
       startDate: this.appBsDatepicker.disablePastAndPresentDate ? '+1d' : (this.appBsDatepicker.disablePastDates ? '+0d' : ''),
       format: this.format,
       forceParse: false,
@@ -87,4 +87,5 @@ export interface BsDatepickerOptions {
   disablePastAndPresentDate?: boolean;
   todayHighlight?: boolean;
   orientation?: string;
+  endDate?: string | Date;
 }

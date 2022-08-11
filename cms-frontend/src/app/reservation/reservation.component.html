@@ -103,7 +103,7 @@
                         <option value="Down Payment">Down Payment</option>
                         <option value="Full Payment">Full Payment</option>
                     </select>
-                    <small id="paymentOptionHelp" class="form-text text-muted font-italic">Please pay at least 50% of your amount due for Down Payment.</small>
+                    <small id="paymentOptionHelp" class="form-text text-muted font-italic">Please pay minimum of P5,000.00 for reservation fee.</small>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -121,8 +121,8 @@
             <div class="col-lg-4" *ngIf="model.paymentMethod === 'Cash'">
                 <div class="form-group">
                     <label>Appointment Date for Payment</label>
-                    <input type="text" class="form-control" name="dateA" placeholder="Date of Appointment" [ngModel]="model.appointmentDate" (ngChangeDate)="model.appointmentDate = $event"
-                        [appBsDatepicker]="{ disablePastAndPresentDate: true }">
+                    <input *ngIf="showAppointment" type="text" class="form-control" name="dateA" placeholder="Date of Appointment" [ngModel]="model.appointmentDate" (ngChangeDate)="model.appointmentDate = $event"
+                        [appBsDatepicker]="{ disablePastAndPresentDate: true, endDate: appointmentEndDate }">
                 </div>
             </div>
             <div class="col-lg-4" *ngIf="model.paymentMethod === 'Gcash'">
